@@ -1,0 +1,353 @@
+
+                **TRABAJO FINAL DE METODOS ESTADISTICOS**
+
+Integrantes del grupo Num: T8
+
+David Barcón Niebla
+Alejandro David Arzola Saavedra 
+
+2º Curso del Grado de Ingeniería Informática de la Universidad de Las Palmas de Gran canaria.
+
+            **Fecha de entrega: miércoles, 8 de enero de 2020, 22:00**
+
+```{r}
+setwd("C:/Users/34636/Desktop/PROYECTO_FINAL_ME")
+trabajo=read.table("Datos_TIC.csv",header=T,sep=";")
+trabajo
+attach(trabajo)
+#En R, boxplot se crea usando la función boxplot (). La función boxplot recoge cualquier número de vectores numéricos, dibujando un diagrama de caja para cada vector.
+boxplot(Tiempos.de.uso[Tipos.TIC.=="movil"],Tiempos.de.uso[Tipos.TIC.=="ordenador"],Tiempos.de.uso[Tipos.TIC.=="TV"],Tiempos.de.uso[Tipos.TIC.=="videojuegos"],col=c("#ff6633","blue","yellow","purple"),xlab ="Tipos de  TIC",ylab= "Numero de horas " ,names=c("Movil","Ordenador","TV","Videojuegos"))
+#Por otra parte gracias a la funcion boxplot podemos observar que la media del ordenador y el movil es parecida pero que el que mas se utiliza es el ordenador  y el que menos se utiliza son los videojuegos ,luego analizaremos mas profundamente segun si esta casado,soltero o en una relacion
+#Se puede apreciar  unos puntos por encima o por debajo de los límites ,estos se conocen como valores  atípicos u outliers.
+require(ggplot2)
+ggplot(data = trabajo, mapping = aes(x = Tipos.TIC., y = Tiempos.de.uso, colour = Tipos.TIC.)) +
+    geom_boxplot() +
+    theme_bw() +
+    theme(legend.position = "none")
+#Gracias al ggplot 2 podemos visualizar mejor nuestros datos.
+ggplot(data = trabajo, mapping = aes(x = Tiempos.de.uso, colour = Tipos.TIC.)) +
+    geom_histogram() +
+    theme_bw() +
+    facet_grid(. ~Tipos.TIC.) +
+    theme(legend.position = "none")
+# La representación gráfica de los datos muestra que las muestras no se distribuyen de forma normal,nos limita en el uso del ANOVA
+
+ggplot(data = trabajo, aes(x=Tipos.TIC., y=Tiempos.de.uso, fill=Tipos.TIC.)) +
+geom_boxplot(outlier.colour = "blue") +          
+labs(x="Tipos de TIC", y="Numerod de horas") +  
+scale_x_discrete(labels=c("Movil","Ordenador","TV","Videojuegos")) +
+guides(fill=FALSE)                                 
+#--------------------------------------------------                          
+ggplot(data = trabajo, aes(x=Tipos.TIC., y=Tiempos.de.uso, fill=Tipos.TIC.) ) +
+  geom_boxplot(alpha=0.3, outlier.colour = "red") +
+  labs(x="Tipos de TIC", y="Numerod de horas") +
+  scale_x_discrete(labels=c("Movil","Ordenador","TV","Videojuegos")) +
+  guides(fill=FALSE) +
+  coord_flip() +              
+  geom_point(stat= "summary", fun.y=mean, shape=16, size=4, color="green") +
+  geom_jitter(width = 0.1, alpha = 0.2)
+  # Los puntos verdes se trata de la media
+  # Los puntos amarillos se trata de los outliers 
+  # Los puntos negros se trata de nuestros valores obtenidos 
+# Lo que hemos hecho son distintas formas de utilzar el ggplot para representar nuestros datos en forma de boxplot  y histograma.
+```
+```{r}
+#Ahora vamos a seguir utilizando los boxplots pero esta vez, segun si estan casados, solteros o en una relacion
+#---------------------------------------------------------------------
+# Soltero/a
+boxplot(Tiempos.de.uso[Tipos.TIC.=="movil" & Estado.Civil=="soltero/a"] ,Tiempos.de.uso[Tipos.TIC.=="ordenador" & Estado.Civil=="soltero/a"],Tiempos.de.uso[Tipos.TIC.=="TV" & Estado.Civil=="soltero/a"],Tiempos.de.uso[Tipos.TIC.=="videojuegos" & Estado.Civil=="soltero/a"],xlab ="Tipos de  TIC",ylab= "Numero de horas",main="Soltero/a",col=c(123,234,445,"blue"),names=c("Movil","Ordenador","TV","Videojuegos"),border= "yellow")
+# En el caso de los solteros podemos observar que la TIC mas utilizada en este caso es el ordenador y como se deduciria la evolucion de las TIC a hecho que poco a poco se dejen de utilizar tipos de TIC que hace unos años eran fundamentales para nosotros como puede ser el ejemplo de la television que con el paso de los años se ve un incremento en las personas que dejan de ver la television y utilizan otros tipos de tecnologia como puede ser el ordenador ya sea por su comodidad , la capacidad de eleccion de las personas sobre lo que quieren informarse o ver, la ausencia de anuncios excesivos provocados por las empresas publicitarias al contrario que en la television, por otra parte tambien la disponibilidad de la persona y el uso de la TIC ,para entenderlo mejor vamos a pensar un ejemplo: En los ordenadores tu puedes decidir el momento que uno quiera o tenga disponible la capacidad de consumir de este tipo de TIC mientras que en las televisiones tienen un horario establecido esto limita al usuario/persona a usar este tipo de TIC.
+
+#Desde otro punto de vista se podria deducir que en el momento en el que vivimos la gente prefiere comunicarse por el ordenador que por los telefonos , cada vez se vez mas frecuente que la gente soltera quiere conocer mas personas y no sabe o carece de cocimiento de como hacerlo o de valentia para hacerlo en persona, entonces utilizan este tipo de plataforma por que es mas segura en cuestion de la intimidad de la persona.
+#Cada vez hay mas aplicaciones para comunicarse por el ordenador que se estan volviendo muy famosas y utilizadas por todos como puede ser el Facebook, Youtube, twitter, WeChat, Qzone, Instagram, Tik Tok etc....
+#-------------------------------------------------------------------
+# Casado/a
+boxplot(Tiempos.de.uso[Tipos.TIC.=="movil" & Estado.Civil=="casado/a"] ,Tiempos.de.uso[Tipos.TIC.=="ordenador" & Estado.Civil=="casado/a"],Tiempos.de.uso[Tipos.TIC.=="TV" & Estado.Civil=="casado/a"],Tiempos.de.uso[Tipos.TIC.=="videojuegos" & Estado.Civil=="casado/a"],xlab ="Tipos de  TIC",ylab= "Numero de horas",main="Casado/a",col=c(123,"red",445,"purple"),names=c("Movil","Ordenador","TV","Videojuegos"))
+#Como podemos ver las personas Casados/as no usan practicamente los videojuegos esto puede ser debido a que estas personas seguramente tengan un trabajo y no dispongan de mucho tiempo libre y entonces prefieran pasar sus momentos en familia que jugando a videojuegos.
+#Por otra parte podemos observar que la TIC mas utilizada en los Casados/as es el movil esto puede ser debido a que actualmente vivimos en una sociedad que esta siempre conectada en cualquier momento y al estar casados significan que tienen una pareja con la que seguramente se pasen la mayoria del tiempo hablando por el movil, por otra parte tambien estas personas al tener trabajo aprovecharan cada descanso para utilizar este tipo de tecnologia ya que es la mas portable .Las personas llevamos el movil 24 horas encima ,entonces estas personas aprovecharan para utilizar esta tecnologia cuando se van a tomar el cafe, cuando estan de camino a la empresa, cuando estan en el baño , cuando estan de compras etc....
+#Tambien el uso de tanto movil puede ser incitados por los trabajos, cada vez es mas comun ver como los trabajadores de una empresa utilizen este tipo de tecnologia para estar informados, como por ejemplo de los turnos de trabajo, de los dias libres, de los periodos de sustitucion de gente que se encuentre ausente por vacaciones , enfermedad o motivos propios etc...
+#Seguidamente la 2 TIC mas utilizada es la television ,esto es provocado a que las personas casadas suponemos que tendran un rango de edad elevado lo cual conlleva a un desuso de las TIC mas actualizadas y prefieren utilizar las TIC que han utilizado durante toda su vida, tambien puede ser provocado que las personas casadas prefieren ver los canales de television ya que se asemejan mas a su gusto, y aprovecharan para ver estos canales en familia y pasar mas tiempo jutos.
+#--------------------------------------------------------------------
+# En una relacion
+boxplot(Tiempos.de.uso[Tipos.TIC.=="movil" & Estado.Civil=="en una relacion"] ,Tiempos.de.uso[Tipos.TIC.=="ordenador" & Estado.Civil=="en una relacion"],Tiempos.de.uso[Tipos.TIC.=="TV" & Estado.Civil=="en una relacion"],Tiempos.de.uso[Tipos.TIC.=="videojuegos" & Estado.Civil=="en una relacion"],xlab ="Tipos de  TIC",ylab= "Numero de horas",main="En una relacion",col=c(123,234,"pink",456),names=c("Movil","Ordenador","TV","Videojuegos"),border= "blue")
+#En este caso las personas que se encuentra en una relacion la TIC que mas utilizan son el movil y el segundo es el ordenador y por ultimo es la television.Suponemos que las edades de estas personas no seran demasiado altas eso explicaria que se usen mas este tipo de TIC. Tambien puede ser por que las personas que estan en una relacion estan en los mejores momentos de su relacion  y pasaran la mayoria del tiempo por estas TIC gracias a las  aplicaciones de mensajeria Instantanea como es Whattsapp. Vivimos en una sociedad que cada vez es mas aislada o podria decirse mas acomodada y usan este tipo de TIC en exceso.Este desarrollo de aplicaciones actualmente provocan la mayoria de relaciones pero sobre todo la mayoria de separaciones o rupturas .El uso abusivo de estas aplicaciones provoca que se esten creando relaciones toxicas que a la vez produce que se este mas conectado y se use mas esta tecnologia,Como hemos mencionado la sociedad cada vez se encuentra mas aislada el desarrollo de esta TIC ocasiona que cada vez se vuelva mas introvertida y con mas dificultades para conocer personas o desarrollar relaciones o aumentar la timidez de estas personas 
+
+# Antes de la evolucion de estas tecnologias las personas tenian muchisimas mas dificultados para formar relaciones por la dificultad de medios de comunicacion pero esto favorecia en el desarrollo de la relacion pues estas personas tenian que ser "valientes" y tomar desiciciones que provocaban el desarrollo interno para poder interactuar con otras personas sin ningun tipo de complejo o timidez, tambien al tener menos tiempo comunicandose tenian tiempo para ellos mismos y poder tener una libertad mayor para hacer cualquier tipo de cosa que quieran.
+
+```
+
+
+```{r}
+#¿ Que relacion hay entre los resultados y las estrategias?
+#¿Los resultados dependen de las estrategias?
+#Resultados= variable dependiente
+#estrategia = variable independiente
+#Los resultados obtenidos estan relacionados con las estrategias aplicadas?
+
+#Empezaremos con una relacion estimado y el uso de tecnologia
+#Test de independencia para variables cualitatives grado de relacion entre ellas
+#Ho: El estado social y las TIC´s en canarias son independientes 
+# H1: No son independientes, por lo tanto estan relacionados
+setwd("C:/Users/34636/Desktop/PROYECTO_FINAL_ME")
+trabajo=read.table("chicuadrado_Varaible_cualitativa.csv",header=T,sep=";",row.names = 1)
+trabajo
+#Estadistico
+ptrabajo<-matrix(c(532/1561*532/1267,119/197*119/1267, 616/1351*616/1267,791/1561*791/1330, 35/197*35/1330,504/1351*504/1330,
+161/1561*161/315,42/197*42/315, 112/1351*112/315,77/1561*77/197,
+1/197*1/197,119/1351*119/197),ncol=4,nrow = 3)
+
+CHI2<-3109*(sum(ptrabajo)-1)
+CHI2 # Xi critico
+# Región Crítica
+gl<-(nrow(trabajo)-1)*(ncol(trabajo)-1)
+gl # Disponemos de 6 grados de libertad 
+qchisq(0.95,gl) # Xi experimental 
+
+test<-chisq.test(trabajo)
+test
+test$observed
+test$expected
+
+# El valor experimental del estadístico de contraste de Chi-cuadrado es igual a 161.86 y el p-valor asociado 2.2e-16 es menor que 0.05 es decir el p valor  nuestro nivel de confianza que aplicado del 95 %, por lo tanto se rechaza la hipótesis nula.
+
+
+#Luego por otra parte tambien podemos comparar gracias al estadistico de contraste  si el xi critico (161.86)  es mayor que el xi experimental (12.59159) en nuestro caso podemos verificar que los criterios se corresponden, se llega  a la misma conclusion en los dos lados que es Rechazamos Ho
+
+#Es lo mismo de arriba del chisq.test pero hecho a mano.
+Tabla<-matrix(c(532,791,161,77,119,35,42,1,616,504,112,119),3,4,byrow=TRUE)
+chisq.test(Tabla,correct=FALSE) # No queremos aplicar la correcion de Yates.
+```
+```{r}
+#Una vez comprobado gracias al test de independencia de chi cuadrado que son variables dependientes . Ahora nos vamos a ocupar de la parte cuantitativa.Y nos vamos a apoyar en la comparacion de medias y para ello vamos a utilizar el ANOVA.
+#------------------------------------------------------------------------------------------
+#Test de ANOVA para los casos de Casados/as en Canarias 
+#Se desean probar las hipótesis
+#H0: μ1 = μ2 =μ3
+#H1 : Al menos dos de las medias no son iguales.
+
+#k=4, N= 16
+#Grados de libertad k -1 = 3, N-k = 12
+#Nivel de significancia: 0.05
+print("Test de ANOVA ara los casos de Casados/as")
+qf(0.95,3,12)
+
+x1<-c(35,28,14,42)
+x2<-c(0,21,0,14)
+x3<-c(14,21,0,7)
+x4<-c(0,0,0,1)
+datos<-data.frame(variable=c(x1,x2,x3,x4))
+grupo=factor(c(rep(1,length(x1)),rep(2,length(x2)),rep(3,length(x3)),rep(4,length(x4))))
+ANOVA<-aov(variable~grupo,data= datos)
+summary(ANOVA)
+
+n<-length(x1)
+yij<-c(x1,x2,x3,x4)
+Y_m_T<-mean(yij)
+STC<-sum((yij-Y_m_T)^2);STC #Suma de cuadrados
+SCT<-n*((mean(x1)-Y_m_T)^2+(mean(x2)-Y_m_T)^2+ # Suma de cuadrados total
+(mean(x3)-Y_m_T)^2+(mean(x4)-Y_m_T)^2);SCT
+SCE<-STC-SCT;SCE #Suma de cuadrados de error 
+s12<-SCT/3;s12 
+s2<-SCE/(12);s2
+FA<-s12/s2;FA
+
+#Como f> 3.490295 Se rechaza H0
+#-------------------------------------------------------------------------------------
+#Test de ANOVA para los casos de los que estan en una relacion en Canarias 
+#Se desean probar las hipótesis
+#H0: μ1 = μ2 =μ3
+#H1 : Al menos dos de las medias no son iguales es decir son distintos
+
+#k=4, N= 64
+#Grados de libertad k -1 = 3, N-k = 60
+#Nivel de significancia: 0.05
+print("Test de ANOVA para los casos de los que estan en una relacion ")
+qf(0.95,3,60)
+
+x1<-c(63,14,42,14,35,35,14,35,84,84,56,7,35,56,21,21)
+x2<-c(63,14,42,14,7,0,7,63,56,56,0,28,56,56,21,21)
+x3<-c(21,0,14,0,0,0,0,0,0,0,35,7,0,21,7,7)
+x4<-c(21,7,7,14,7,0,14,7,0,0,0,0,0,28,7,7)
+datos<-data.frame(variable1=c(x1,x2,x3,x4))
+grupo1=factor(c(rep(1,length(x1)),rep(2,length(x2)),rep(3,length(x3)),rep(4,length(x4))))
+ANOVA1<-aov(variable1~grupo1,data= datos)
+summary(ANOVA1)
+
+n<-length(x1)
+yij<-c(x1,x2,x3,x4)
+Y_m_T<-mean(yij)
+STC<-sum((yij-Y_m_T)^2);STC# Suma de cuadrados
+SCT<-n*((mean(x1)-Y_m_T)^2+(mean(x2)-Y_m_T)^2+
+(mean(x3)-Y_m_T)^2+(mean(x4)-Y_m_T)^2);SCT# Suma de cuadrados total
+SCE<-STC-SCT;SCE
+s12<-SCT/3;s12
+s2<-SCE/(60);s2
+FA<-s12/s2;FA
+#Como f> 2.758078 Se rechaza H0
+#------------------------------------------------------------------------------------------
+#Test de ANOVA para los casos de los que estan solteros/as en Canarias 
+#Se desean probar las hipótesis
+#H0: μ1 = μ2 =μ3
+#H1 : Al menos dos de las medias no son iguales es decir son distintos
+
+#k=4, N= 88
+#Grados de libertad k -1 = 3, N-k = 84
+#Nivel de significancia: 0.05
+print("Test de ANOVA para los casos de los que estan solteros/as ")
+qf(0.95,3,84)
+
+x1<-c(21,28,28,49,28,21,21,14,7,7,28,56,49,7,28,14,21,42,35,14,7,7)
+x2<-c(21,28,56,28,49,56,56,7,28,7,42,14,56,49,56,7,49,56,0,56,56,14)
+x3<-c(0,0,0,0,0,0,0,0,7,14,28,0,35,14,14,21,0,0,7,7,0,14)
+x4<-c(28,56,42,0,28,14,14,14,0,21,0,0,0,0,0,0,0,0,0,0,28,0)
+datos<-data.frame(variable2=c(x1,x2,x3,x4))
+grupo2=factor(c(rep(1,length(x1)),rep(2,length(x2)),rep(3,length(x3)),rep(4,length(x4))))
+ANOVA2<-aov(variable2~grupo2,data= datos)
+summary(ANOVA2)
+
+n<-length(x1)
+yij<-c(x1,x2,x3,x4)
+Y_m_T<-mean(yij)
+STC<-sum((yij-Y_m_T)^2);STC
+SCT<-n*((mean(x1)-Y_m_T)^2+(mean(x2)-Y_m_T)^2+
+(mean(x3)-Y_m_T)^2+(mean(x4)-Y_m_T)^2);SCT
+SCE<-STC-SCT;SCE
+s12<-SCT/3;s12
+s2<-SCE/(84);s2
+FA<-s12/s2;FA
+#Como f> 2.713227 Se rechaza H0
+#-------------------------------------------------------------------------------
+```
+
+```{r}
+# Una vez aplicado el ANOVA ¿Sería posible saber cuáles son las TIC que generan estas diferencias?
+#Claramente si,gracias al comando tukeyHSD podemos ver cuales son los categorias que no tienen diferencias.
+#----------------------------------------------------------------------
+parte1=TukeyHSD(ANOVA) #Para los casados/as 
+parte1
+#Podemos observar que en el p value
+# Que en el caso de casados existen diferencias en todas las TIC excepto entre los Videojuegos y la Television , entre los Videojuegos y el Ordenador  y entre la Television y el Ordenador 
+plot(parte1,col="blue")
+
+#--------------------------------------------------------------------------
+parte2=TukeyHSD(ANOVA1)
+parte2 # Para los que estan en una relacion
+# En el caso de los que estan en relacion podemos observar que existen diferencias en todas las TIC excepto entre los Videojuegos y la Television y entre ordenador y los moviles
+plot(parte2,col="red")
+#----------------------------------------------------------------------
+parte3=TukeyHSD(ANOVA2)
+parte3# Para los que estan solteros/as
+# En el caso de los que estan solretos/as podemos observar que existen diferencias en todas las TIC excepto entre los Videojuegos y la Television y entre ordenador y los moviles
+plot(parte3,col="brown")
+
+```
+```{r}
+#Ahora vamos a verificar el ANOVA 
+#Deben cumplir tres condiciones : independencia, homocedasticidad y normalidad
+#--------------------------------------------------------------------------
+#Casados
+horas<- c(x1<-c(35,28,14,42,0,21,0,14,14,21,0,7,0,0,0,1))
+
+TIC<- as.factor(c(rep(c("movil", "ordenador", "TV", "Videojuegos"), each =4)))
+
+casado = aov( lm(horas ~ TIC) )
+casado       
+#Los gráficos y descriptivos nos informan si se verifica la igualdad de varianzas en los grupos descritos:
+summary(casado $residuals)
+#Para ver la independencia de los datos
+plot(casado $residuals)
+#Para ver la normalidad 
+# Los gráficos y descriptivos nos informan si se verifica la igualdad de varianzas 
+summary(casado$residuals)
+boxplot(casado$residuals,main="Valor residual de los Casados")
+hist(casado$residuals,main="Valor residual de los Casados")
+qqnorm(casado$residuals,main="Valor residual de los Casados") 
+qqline(casado$residuals)
+#Ho:Cumplen la normalidad de residuos
+#H1:Rechazamos Ho
+# El test de Shapiro-Wilk indica que no tenemos evidencia suficiente para rechazar la hipótesis nula (normalidad de los residuos)
+shapiro.test(casado$residuals)
+
+# El test de Bartlett indica que  tenemos evidencia suficiente para rechazar la hipótesis nula (las varianzas no  son iguales)
+bartlett.test(casado$residuals ~ TIC)
+# En cuanto a la homoestacidad
+# Con los gráficos verificaremos  la igualdad de varianzas en los grupos descritos:
+boxplot(casado$residuals~TIC, col = c("pink", "red", "white","green"))  
+ds <- tapply(casado$residuals, TIC, sd)
+max(ds) / min(ds)  
+# falta de homocedasticidad >23
+
+
+
+#------------------------------------------------------------------------
+#Solteros
+horas1<- c(x2=c(21,28,28,49,28,21,21,14,7,7,28,56,49,7,28,14,21,42,35,14,7,7,21,28,56,28,49,56,56,7,28,7,42,14,56,49,56,7,49,56,0,56,56,14,0,0,0,0,0,0,0,0,7,14,28,0,35,14,14,21,0,0,7,7,0,14,28,56,42,0,28,14,14,14,0,21,0,0,0,0,0,0,0,0,0,0,28,0))
+
+TIC1<- as.factor(c(rep(c("movil", "ordenador", "TV", "Videojuegos"), each =22)))
+
+soltero = aov( lm(horas1 ~ TIC1) )
+soltero       
+#Los gráficos y descriptivos nos informan si se verifica la igualdad de varianzas en los grupos descritos:
+summary(soltero $residuals)
+#Para ver la independencia de los datos
+plot(soltero $residuals)
+#Para ver la normalidad 
+# Los gráficos y descriptivos nos informan si se verifica la igualdad de varianzas 
+summary(soltero$residuals)
+boxplot(soltero$residuals,main="Valor residual de los solteros")
+hist(soltero$residuals,main="Valor residual de los solteros")
+qqnorm(soltero$residuals,main="Valor residual de los solteros") 
+qqline(soltero$residuals)
+#Ho:Cumplen la normalidad de residuos
+#H1:Rechazamos Ho
+# El test de Shapiro-Wilk indica que no tenemos evidencia suficiente para rechazar la hipótesis nula (normalidad de los residuos)
+shapiro.test(soltero$residuals)
+
+# El test de Bartlett indica que  tenemos evidencia suficiente para rechazar la hipótesis nula (las varianzas no  son iguales)
+bartlett.test(soltero$residuals ~ TIC1)
+# En cuanto a la homoestacidad
+# Con los gráficos verificaremos  la igualdad de varianzas en los grupos descritos:
+boxplot(soltero$residuals~TIC1, col = c("pink", "red", "white","green"))  
+ds1 <- tapply(soltero$residuals, TIC1, sd)
+max(ds1) / min(ds1)  
+# falta de homocedasticidad >2.015361
+
+#------------------------------------------------------------------------------
+
+#en una relacion
+horas2<- c(x3=c(63,14,42,14,35,35,14,35,84,84,56,7,35,56,21,21,63,14,42,14,7,0,7,63,56,56,0,28,56,56,21,21,21,0,14,0,0,0,0,0,0,0,35,7,0,21,7,7,21,7,7,14,7,0,14,7,0,0,0,0,0,28,7,7))
+
+TIC2<- as.factor(c(rep(c("movil", "ordenador", "TV", "Videojuegos"), each =16)))
+
+relacion = aov( lm(horas2 ~ TIC2) )
+relacion       
+#Los gráficos y descriptivos nos informan si se verifica la igualdad de varianzas en los grupos descritos:
+summary(relacion $residuals)
+#Para ver la independencia de los datos
+plot(relacion $residuals)
+#Para ver la normalidad 
+# Los gráficos y descriptivos nos informan si se verifica la igualdad de varianzas 
+summary(relacion$residuals)
+boxplot(relacion$residuals,main="Valor residual en una relacion")
+hist(relacion$residuals,main="Valor residual en una relacions")
+qqnorm(relacion$residuals,main="Valor residual en una relacion") 
+qqline(relacion$residuals)
+#Ho:Cumplen la normalidad de residuos
+#H1:Rechazamos Ho
+# El test de Shapiro-Wilk indica que no tenemos evidencia suficiente para rechazar la hipótesis nula (normalidad de los residuos)
+shapiro.test(relacion$residuals)
+
+# El test de Bartlett indica que  tenemos evidencia suficiente para rechazar la hipótesis nula (las varianzas no  son iguales)
+bartlett.test(relacion$residuals ~ TIC2)
+# En cuanto a la homoestacidad
+# Con los gráficos verificaremos  la igualdad de varianzas en los grupos descritos:
+boxplot(relacion$residuals~TIC2, col = c("pink", "red", "white","green"))  
+ds2 <- tapply(relacion$residuals, TIC2, sd)
+max(ds2) / min(ds2)  
+# falta de homocedasticidad >2.932067
+
+```
+```{r}
+#Conclusiones que se pueden sacar de toda la investigacion realizada son que los solteros lo que utilizan mas son los ordenadores y el movil con medias parecidas por otra parte los casados tienen medias parecidas en el uso de los Videojuegos y la Television y el Ordenador  y los que estan en relacion tienen medias parecidas en  Videojuegos y la Television y entre ordenador y los moviles
+```
+
