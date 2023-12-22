@@ -1,0 +1,13 @@
+Ejercicio 3:
+```{r}
+x=c("Falta de motivación por la asignatura ","Escasa base matemática para comprender los conceptos","Horario del semestre","Carga de trabajo del curso donde se ubica la asignatura excesiva","Laboratorios deficientes","Prácticas muy laboriosas","Poco tiempo para el trabajo de curso","Explicaciones en clases teóricas no satisfactorias","Otras causas ")
+y=data.frame(causas=x,cantidad=c(10,25,15,37,15,8,28,10,6))
+y
+attach(y)
+names(y)
+f= cantidad
+names(f) =causas
+f
+pareto.chart(f)
+```
+

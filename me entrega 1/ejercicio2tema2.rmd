@@ -1,0 +1,20 @@
+Ejercicio 2:
+```{r}
+#apartado a
+pa=15/40
+print(pa)
+#apartado b
+pb=25/40
+boa=(pa*(25/39))/pa
+print (boa)
+#apartado c
+bia=pa*boa
+print(bia)
+#apartado d
+bua=pa+pb-bia
+print(bua)
+biaic=bia*15/38
+print (biaic)
+biaicn=bia*25/38
+print (biaicn)
+```

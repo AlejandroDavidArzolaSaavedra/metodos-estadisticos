@@ -1,0 +1,48 @@
+EJERCICIO 1:
+```{r}
+x=c(50,73,73,68,67,74,73,67,71,79,74,74,77,74,71,80,72,74,77,75,71,73,75,76,77,71,81,68,66,73,91,75,89,77,93,57,66,83,86,90,55,77,78,91,82,83,87,96,85,88,101,87,80,73,76,80,89,76,78,99,80,85,84,72,65,69,79,84,92,83,86,76,80,81,74,73,72,79,55,66)
+length(x) #Cantidad de datos
+rango=max(x)-min(x) #Rango de la valor
+print(rango)
+amplitud=rango/100*5
+print(amplitud)
+histograma= hist(x,breaks=seq(min(x),max(x),by=amplitud)) #Tabña de la frecuencias
+final=(table.freq(histograma))
+print (final)
+names(final)
+names(final)=c(lower="Intervalo_min",Upper="Intervalo_amplitud",Main="Media_intervalos",frequency="Frecuenciabsoluta",Percentage="Frecuencia relativa",CF="Frecuencia_absoluta_acumulada",CPF="Frecuencia_relatva_acumulada")
+print(final)
+#table(x)
+#str(x)
+#prop.table(x) #Frecuencia relativa de cada elemento
+#plot(table(x)) # Visualizar la tabla de frecuencai
+mean(x)
+attach(final)
+newdata<-subset(final, select=c(Media_intervalos,Frecuenciabsoluta))
+newdata
+media = data.frame(xifi =Media_intervalos*Frecuenciabsoluta)
+MEDIA<-cbind(newdata,media)
+print(MEDIA)
+attach(MEDIA)
+detach(final)
+attach(final)
+Mediafinal=sum(xifi)
+Mediafinal=Mediafinal/length(x)
+print(Mediafinal)
+p=mean(x)
+table(x)
+desviacion=data.frame(Desvi=(p-x)^2)
+desviacionFinal=sum(desviacion/(length(x)-1))
+Desviacion_muestral=sqrt(desviacionFinal)
+print(Desviacion_muestral)
+sd(x)
+median(x)
+quantile(x)
+IQR(x)
+boxplot(x)
+library(outliers)
+x_outliers=data.frame(b=c(58,61,94))
+x2=rbind(x,x_outliers)
+boxplot(x2)
+```
+

@@ -1,0 +1,42 @@
+```{r}
+#Empezamos el ejercicio
+nam
+ # Si lo cierro pos se borra luego
+list(Conductores="DriversKilled")
+print (Muertos)
+names(Muertos)
+names(Muertos)=c("Conductores MUERTOS","Conductores","En frente", "Asientos traseros","Kilometros","Precio del petroleo","Numero de conductores de furgonetas","Leyes")
+
+#attach(Muertos)
+//x='Conductores MUERTOS'
+y='Leyes'
+
+aggregate(cbind(Conductores Muertos,`peso real`)~Sexo,FUN=mean)
+plot(peso[Sexo=="M"], `peso real`[Sexo=="M"], main = "Hombres") 
+grid() 
+abline(lm(peso[Sexo=="M"]~`peso real`[Sexo=="M"]), col="blue") 
+abline(a=0, b=1, col="red") 
+#Muestra de todas las pruebas hechas por hombre sy mujeres
+#y haciendo una linea de comparacion todos los elementos
+boxplot(datos_NA)
+boxplot(datos)
+mean(peso)/
+
+```
+
+
+
+```{r}
+setwd("/Users/34636/Desktop")
+datos=read.table("muertes.txt",header=T,sep=",")
+attach(datos)
+print(datos)
+driversw=DriversKilled~law
+#boxplot(DriversKilled~driversw)
+agg_sum<-aggregate(DriversKilled,DriversKilled~law,by law,FUN=boxplot, na.rm=TRUE)
+agg_sum
+
+```
+
+
+

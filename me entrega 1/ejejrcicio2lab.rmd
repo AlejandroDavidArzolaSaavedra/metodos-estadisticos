@@ -1,0 +1,13 @@
+
+
+```{r}
+MplsStops
+datos=MplsStops
+attach(datos)
+datos_seleccionados<-subset(datos[problem=="traffic",],select = c(race,gender,neighborhood))
+ftable(gender,race)
+pie(table(gender,race))
+table(neighborhood)
+pie(table(neighborhood))
+```
+

@@ -1,0 +1,16 @@
+```{r}
+euro
+euro*NULL
+euro*2
+euro+1
+```
+```{r}
+Formaldehyde
+```
+```{r}
+WorldPhones
+```
+```{r}
+Titanic
+```
+

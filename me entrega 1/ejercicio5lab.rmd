@@ -1,0 +1,16 @@
+
+
+```{r}
+getwd()
+h=read.table("C:/Users/34636/Desktop/Data_Labs_R/casas.txt" , sep = "\t", header=TRUE)
+h
+attach(h)
+names(h)
+a=rank(Precio)
+b=sort(Precio)
+c=order(Precio,decreasing=FALSE)
+comparativa=data.frame(Precio,a,b,c)
+comparativa
+h=data.frame(Localizacion[Precio>190])
+h
+```

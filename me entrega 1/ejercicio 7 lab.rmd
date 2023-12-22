@@ -1,0 +1,105 @@
+```{r}
+
+library(ggplot2)
+library(dplyr)
+
+VentasPRO<-read.table("C:/Users/34636/Desktop/Data_Labs_R/Ventas_Provincia.txt", sep = ",", header = T, dec = ".")
+str(VentasPRO)
+VentasPRO
+head(VentasPRO)
+attach(VentasPRO)
+
+#apartado a 
+
+totale2012<-aggregate(Total_Ventas~(Provincia),VentasPRO,sum)
+totale2012
+medias_provincia_2012<-aggregate(Total_Ventas~(Provincia),VentasPRO,mean)
+names(medias_provincia_2012) <- c("Provincia", "Medias")
+
+medias_provincia_2012
+
+#apartado b
+
+totale2012<-aggregate(Total_Ventas~(Provincia),VentasPRO,sum)
+totale2012[which.max(totale2012[,2]),]
+totale2012[which.min(totale2012[,2]),]
+
+#apartado c
+Year_Mes <- as.Date(Year_Mes)
+segundo_semestre <- VentasPRO[Year_Mes>"2012-06-01",]
+detach(VentasPRO)
+attach(segundo_semestre)
+
+
+provincias_estudio <- segundo_semestre[Provincia=="Caceres"|Provincia=="Madrid"|Provincia=="Barcelona",]
+detach(segundo_semestre)
+attach(provincias_estudio)
+provincias_estudio
+
+#apartado d
+
+Year_Mes_Semestre<-unique(Year_Mes[Year_Mes>"2012-06-01"])
+
+plot(Year_Mes_Semestre, 
+     Total_Ventas[Provincia=="Barcelona"],
+     type = "b", col="blue", lwd=2,
+     ylim = c(0,max(Total_Ventas)),
+     ylab="Ventas Mensuales en euros", 
+     xlab="Segundo Semestre 2012",
+     main = "Análisis de Ventas por Provincia")
+
+text(Year_Mes_Semestre[2],50000, labels = "Barcelona", col="blue",cex = 1.10)
+
+grid()
+
+points(Year_Mes_Semestre, 
+     Total_Ventas[Provincia=="Madrid"], 
+     type = "b", col="blue",lwd=2)
+
+text(Year_Mes_Semestre[5],55000, labels = "Madrid", col="red",cex = 1.10)
+
+points(Year_Mes_Semestre, 
+       Total_Ventas[Provincia=="Caceres"], 
+       type = "b", col="gray", lwd=2)
+
+text(Year_Mes_Semestre[4],45500, labels = "Cáceres", col="green",cex = 1.10)
+
+provincias_estudio_semestre<-factor(provincias_estudio$Provincia,
+                                    levels = unique(provincias_estudio$Provincia))
+
+boxplot(provincias_estudio$Total_Ventas~provincias_estudio_semestre, col="green",
+        ylab="Ventas Mensuales en euros", xlab="Provincias Seleccionadas",
+        main = "Análisis de Ventas por Provincia")
+
+grid()
+
+qplot(Year_Mes, Total_Ventas, data=provincias_estudio, group=Provincia, colour=Provincia, geom=c("line", "point") ) 
+
+g <- ggplot(data=provincias_estudio, mapping=aes(x=Year_Mes, y=Total_Ventas, group=Provincia, colour=Provincia))
+g <- g + geom_point() + geom_line()
+g
+
+g <- g + xlab("Segundo Semestre 2012") + ylab("Ventas Mensuales en euros") + ggtitle("Análisis de Ventas por Provincia")
+g
+g + geom_point(size=3)
+g + geom_line(size=1) + geom_point(size=3,colour="black")
+g <- ggplot(data=provincias_estudio, mapping=aes(x=Year_Mes, y=Total_Ventas, group=Provincia, colour=Provincia))
+g + geom_point()
+g + geom_point(aes(size=10))
+g + geom_point(size=5, colour="black") + geom_line()
+g + geom_point(aes(y=Total_Ventas/10000),size=5, colour="black" )
+g2<- g + aes(y=Total_Ventas/10000)+ geom_line(size=1)+ geom_point(size=3,colour="black")
+g2
+g2<-g2 +xlab("Segundo Semestre 2012") + ylab("Ventas Mensuales en Miles deuros") + ggtitle("Análisis de Ventas por Provincia")
+g2
+g <- ggplot(data=provincias_estudio, mapping=aes(x=Year_Mes, y=Total_Ventas, group=Provincia, colour=Provincia))
+g + geom_point()
+g + geom_line(linetype="dashed")
+g + geom_bar(stat = "identity", aes(fill=Provincia) , position = "stack")
+g + geom_bar(stat = "identity", aes(fill=Provincia), position = "fill")
+g + geom_bar(stat = "identity", aes(fill=Provincia), position = "dodge")
+g + geom_boxplot(aes(x=Provincia)) + xlab("Provincias Seleccionadas") + 
+    ylab("Ventas Mensuales euros") + ggtitle("AnálisisVentasProvincia")
+
+```
+

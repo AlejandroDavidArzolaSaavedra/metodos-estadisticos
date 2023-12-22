@@ -1,0 +1,8 @@
+s
+```{r}
+Davis=na.omit(Davis)
+Davis
+Davis=rename(Davis,c(sex="Sexo,",weight="Peso",height="Altura",repwt="Peso2",repht="Altura2"))
+print(Davis)
+tapply(temperatura,mes,mean)
+```

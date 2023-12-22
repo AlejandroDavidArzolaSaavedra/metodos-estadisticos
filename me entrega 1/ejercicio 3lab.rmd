@@ -1,0 +1,37 @@
+
+
+```{r}
+library(carData)
+library(knitr)
+datos_NA=Davis
+datos=na.omit(datos_NA)
+names(datos)=c("Sexo","peso","altura","peso real","altura real")
+attach(datos)
+print(datos)
+```
+
+```{r}
+aggregate(cbind(peso,`peso real`)~Sexo,FUN=mean) #el fun mean
+#se encargaba de hacerte la media
+# esto sire para hacer una comparacion del peso
+#real de las mujeres y hombres con el verdadero
+```
+
+```{r}
+aggregate(cbind(peso,`peso real`)~Sexo,FUN=sd)
+plot(peso[Sexo=="M"], `peso real`[Sexo=="M"], main = "Hombres") 
+grid() 
+abline(lm(peso[Sexo=="M"]~`peso real`[Sexo=="M"]), col="blue") 
+abline(a=0, b=1, col="green") 
+#Muestra de todas las pruebas hechas por hombre sy mujeres
+#y haciendo una linea de comparacion todos los elementos
+attach(datos)
+boxplot(peso,`peso real`)
+boxplot(altura,`altura real`)
+``` 
+```
+
+
+
+
+
