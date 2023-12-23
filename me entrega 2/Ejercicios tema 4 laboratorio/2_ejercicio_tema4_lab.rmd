@@ -1,0 +1,47 @@
+Ejercicio 2 (Opcional). Con datos del INE que indican la
+proyección 2018-2068 de la evolución de la población residente
+en España a 1 de enero, por sexo, edad y año: http://www.ine.es/jaxi/Tabla.htm?path=/t20/p278/p01/20182068
+/pob/l0/&file=01001.px&L=0 
+ 
+Desarrollar una animación con los datos poblaciones del periodo
+2018-68 que permita visualizar las proyecciones y los cambios.
+Analizar y establecer conclusiones al respecto con su posible 
+proyección a Canarias.
+```{r}
+#llamamos al directorio donde se encuentra el archivo original 
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_2_entrega/DATOS")
+library("readxl") 
+library(pyramid) 
+final=read.table("Ejercicio_2_tema4.csv", header=T,sep=";") # esta 
+#convertido a csv entonces los separadores son ; y tienen titulo , 
+#para que los distinga
+final
+rango=final[,1] # Aqui lo que hacemos es cojer el rango de edades de hombres y mujeres 
+ # Creamos un bucle for que valla de 1 en 1 hasta 51 por que es del 2068 hasta el 2018 y son 103 variables por que estan separados entre hombres y mujeres por eso luego lo que hago es cojo un conjunto del anterior tabla de 2 en 2 hasta el 2 +1 para cojer el 3 si la i vale 1 pos coje la columna 2 y 3 si vale 2 coje 4 y 5 y asi consecutivamente y al final de este conjunto tiene que ir unido a las edades anteriormente seleccionadas con el nombre de rango 
+
+# Por ultimo aplicamos el pyramid  y en este caso he dividido la edad de la poblacion en dos partes para que se pudiera ver mejor visualmente aunque tambien se podia haber dividido de forma quinquenal 
+
+#Como podemos ver segun el paso de los años la poblacion residente española sera de mas edad y por otro lado podemos observar que las mujeres tienen mas edad que los hombres con nacionalidad española,Va en cremiento a cada caso de cada año la poblacion es cada vez mas viejo como perculiaridad los ultimos años hay un gran cremcimiento de las mujeres de 100 o mas años .La poblacion crece de manera equitativa tanto las mujeres como los hombres hasta que llegan a unas edades mas altas.
+# Cob el paso de los descienden las edades altas 
+#pero luego vuelve a crecer aunque , lo que ocurre 
+#es que la poblacion envejece y tiene mas años con 
+#paso de los años hasta 2068 las causas pueden ser 
+#por la evoluacion de la medicina y la inversion de 
+#dinero en ello,Hay un crecimiento bastante exponencial 
+#en las edades grandes desde los 50 a los 80  y las mujeres
+#duran con mas edad.
+# los he agruoado de manera quinquenal para que se pudiera
+#ver mejor visualmente pero los resultados en suma son los mismos.
+library(plotrix)
+library(ggplot2)
+Colores_distintos=color.gradient(c(2,2,2,1),c(3,4,2,2),c(5,4,0.5,6),12)
+Colores_distintos_2=color.gradient(c(1,3,4,1),c(2,1,8,1),c(1,2,1,1),12)
+for(i in seq( 1,51,1)){
+nombre=cbind(final[,(2*i):(2*i+1)],rango)
+name=pyramid(nombre,main=c("Año",as.character(2069-i)),
+AxisFM="d",Csize = 0.5,AxisBI = 2,Llab="Hombres",Rlab="Mujeres",Clab="Edades",
+Lcol=Colores_distintos,AxisBM = "", Rcol=Colores_distintos_2,
+Cadj=-0.025,Cgap = 0.20)
+}
+#
+```

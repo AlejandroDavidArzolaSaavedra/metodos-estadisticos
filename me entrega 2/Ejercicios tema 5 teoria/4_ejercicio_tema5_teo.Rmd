@@ -1,0 +1,77 @@
+Cuestión 4. Una empresa de distribución y logística de 
+las Islas Canarias tiene una máquina especial para el
+empaquetado de artículos calificados como frágiles. 
+Si un artículo se coloca de forma incorrecta en la máquina
+no se podría extraer su contenido e incluso se podría dañar. 
+En este caso se dice que “falló la máquina”.
+
+a) Si la probabilidad de que falle la máquina es de 0.05. 
+¿Cuál es la probabilidad de que ocurra más de un fallo
+en un lote de 35 paquetes?
+
+b) Si la probabilidad de que falle la máquina es de 0.05 
+y se empaqueta un lote de 500 artículos, ¿Cuál es la 
+probabilidad de que ocurran más de 10 fallos?
+
+c) Analizar la distribución de probabilidad elegida 
+para este caso, justificar su uso,analizar los resultados 
+con R y visualizar los mismos. 
+
+
+
+
+```{r}
+#a) 
+# x= numero de fallos 
+n=35 # lote de 35 paquetes
+p=0.05 # proabilidad de que falle la maquina
+# Nos piden la probabildidad de que ocurra mas de 
+# un fallos en la maquina entonces tendriamos que 
+# calcular la P < e igual a 1 
+#lo que es lo mismoÇ
+a=1
+res=1-pbinom(a,n,p)
+res 
+# la probabilidad de que en un lote de 35 paqueteS
+# falle la maquina es de un 52 %
+
+```
+
+
+```{r}
+#b) se empaquetan 500 articulos
+# probabildiad de que ocurran mas de 10 fallos
+n2=500 # articulos
+p # es lo mismo
+x2=n2*p
+x2
+fallos=10 # mas de 10 fallos 
+
+res2=1-ppois(fallos,x2)
+res2
+# la probabilidad de que ocurran 10 fallos es
+# un lote de 500 articulos es del 99 % lo cual
+# nos quiere decir q seguramente ocurran 10 fallos o mas
+x=0:500
+plot(x,ppois(x,x2),xlab="Número de Visitas", ylab="P(X=x)",type = "h", col="blue", main="Visitas Sitio Web: Poisson(2)") 
+points(x,ppois(x,x2), col="brown") 
+grid()
+```
+
+
+```{r}
+#c)
+#Hemos hecho una aproximacion de una binomial a una 
+# possion del apartado a al apartado b debido a que 
+# en el apartado b nuestra n es demasiado grande ,
+# entonces lo que hacemos es multiplicar n por p  
+# que es la probabilidad y ya tenemos nuestro nuevo 
+# valor de lambda y aplicando el metodo poisson 
+# tendremos finalmente la respuesta
+x<-1:35 
+Probabilidad_x<-pbinom(x, size=35, prob=0.95) 
+plot(x,Probabilidad_x,col="blue",  xlab="fallo maquina", ylab="P(X<=x)", type = "h", main = "Defectuosos, n=35, p=0.95") 
+points(x,Probabilidad_x,col="brown")
+grid()
+```
+

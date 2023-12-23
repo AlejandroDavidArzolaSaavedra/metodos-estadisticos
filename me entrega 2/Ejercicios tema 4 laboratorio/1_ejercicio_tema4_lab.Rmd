@@ -1,0 +1,52 @@
+Ejercicio 1. 
+Obtener del Instituto Canario de Estadística (ISTAC) la distribución
+por edades de la población entre los años 2000 a 2017. Representar 
+las pirámides de población correspondientes con la librería pyramid,
+y analizar la evolución anual.  
+
+Razonar las conclusiones y realizar una pequeña animación (en formato
+GIF o similar) de la evolución de las pirámides de población en esos 
+años. Para obtener más fácilmente los datos se puede ir directamente
+a la dirección: (link) y consultar los datos de “población según sexos
+y grupos de edad grandes y quinquenales”
+```{r}
+#llamamos al directorio donde se encuentra el archivo original 
+setwd("/Users/34636/Desktop/Ejercicio R parte 2")
+library("readxl") 
+library(pyramid) 
+final=read.table("2prueba.csv", header=T,sep=";") # esta convertido a 
+# csv entonces los separadores son ; y tienen titulo , para 
+# que los distinga
+final
+rango=final[,1] # Aqui lo que hacemos es cojer el rango de edades 
+# de hombres y mujeres 
+ # Creamos un bucle for que valla de 1 en 1 hasta 19 por que 
+# es del 2000 hasta el 2018 y son 38 variables por que estan 
+ # separados entre hombres y mujeres por eso luego lo que hago 
+# es cojo un conjunto del anterior tabla de 2 en 2 hasta el 2 +1
+# para cojer el 3 si la i vale 1 pos coje la columna 2 y 3 si vale
+#2 coje 4 y 5 y asi consecutivamente y al final de este conjunto 
+#tiene que ir unido a las edades anteriormente seleccionadas con 
+#el nombre de rango . Y por ultimo lo que hacemos es aplicar el pyramid
+# y lo demas son elementos decorativos para visualizarlo mejor 
+for(i in seq( 1,19,1)){
+nombre=cbind(final[,(2*i):(2*i+1)],rango)
+name=pyramid(nombre,main=c("Año",as.character(2019-i)),
+AxisFM="d",Csize = 0.5,AxisBI = 2,Llab="Hombres",Rlab="Mujeres",Clab="Edades",Lcol="green",
+AxisBM = "", Rcol="purple",Cadj=-0.025,Cgap = 0.20)
+}
+#Como podemos ver en el principio en el año 2000 las mujeres han 
+#tenido mas años que los hombres, a partir del año 2005 podemos ver 
+#un crecimiento de los hombres de edad media los y podemos ver que 
+#con el paso del tiempo los hombres y mujeres van disminuyendo y 
+#aumentando dependiendo de los años pero las mujeres siguen viviendo
+#mas con edades altas mientras que los hombres no, pero van en aumento 
+#los hombres de edad media entre 20 y 40 años como podemos ver en el
+#2017.Lo que se puede observar es que tambien con el paso de los años 
+#las personas viven con mas edades altas.Tambien una gran diferencia 
+#que se nota entre todos estos años es que en el 2000 la poblacion se
+#centraba mas entre los 15 y los 40 años pero en el 2018  se centra mas
+#entre los 30 y los 60 años .Esto nos sive para conocer que la mayoria
+#de la poblacion en canarias actualmente es bastante adulta.
+```
+

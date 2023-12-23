@@ -1,0 +1,67 @@
+Cuestión 5: Una Cooperativa de taxis de Las Palmas trata de decidir si comprará neumáticos de la marca A o de la marca B para su flotilla de taxis. Para estimar la diferencia entre las dos marcas realiza un experimento utilizando 12 neumáticos de cada marca, los cuales se utilizan hasta que se desgastan. Los resultados son: 
+
+a) Calcular un intervalo de confianza del 95% para 𝝁𝝁𝑨𝑨−𝝁𝝁𝑩𝑩, suponiendo que las poblaciones se distribuyen de forma aproximadamente normal. 
+
+b) Analice los resultados bajo las suposiciones de que las varianzas poblacionales sean o no iguales y explicar los mismos. Justificar las respuestas. 
+```{r}
+
+# a) y b)
+# Marca A(1)
+media1=36300
+desviacion_tipica1=5000
+n1=12
+# Marca B(2)
+media2=38100
+desviacion_tipica2=6100
+n2=12
+#1) Contraste para la igualda de varianzas
+# H0 :  varianza1=varianza2
+# h1: varianza1/=varianza2
+# Se trata de una fisher
+v1=n1-1
+alfa=0.05
+alfa2=alfa/2
+alfa1=1-alfa+alfa2
+v1
+v2=n2-1
+v2
+qf(0.025,n1,n2)
+qf(0.975,n1,n2)
+t=desviacion_tipica1^2/desviacion_tipica2^2
+t
+# No rechazamos H0 
+#---------) Podemos asumir igualdad de varianza 
+# El intervalo de confianza para la diferencias de medias mu1-mu2 con varianzas poblacionales desconocidades pero supuestamente iguales. varianza1=varianza2
+sp=((v1*(desviacion_tipica1^2))+(v2*(desviacion_tipica2^2)))/(n1+n2-2)
+sp
+sp2=sqrt(sp)
+sp2
+t=(media1-media2)/(sp*sqrt((1/n1)+(1/n2)))
+t
+qt(alfa2,n1+n2-2)
+h=qt(1-alfa2,n1+n2-2)
+h
+intervalo1=(media1-media2)+h*(sp2*(sqrt((1/n1)+(1/n2))))
+intervalo1
+intervalo2=(media1-media2)-h*(sp2*(sqrt((1/n1)+(1/n2))))
+intervalo2
+#Podemos estimar que no hay distnacia mu1 = mu2
+#Ahora para el caso de que fueran distintas
+
+#IC para la diferencia de medias mu1-mu2 con varianza1 y varianza 2 desconocidas y distintas
+
+v=((((desviacion_tipica1^2)/n1))+((desviacion_tipica2^2)/n2))^2/
+  (((((desviacion_tipica1^2)/n1)^2)/(n1-1))+((((desviacion_tipica2^2)/n2)^2)/(n2-1)))
+v
+# Y para hallar los intervalos es:
+# media1-media2+-v*sqrt(s1^2/n1+s2^2/n2)
+Intervalo1=(media1-media2)+v*alfa2*sqrt(desviacion_tipica1^2/n1+desviacion_tipica2^2/n2)
+Intervalo1
+Intervalo2=(media1-media2)-v*alfa2*sqrt(desviacion_tipica1^2/n1+desviacion_tipica2^2/n2)
+Intervalo2
+# Estimamos mU1<mu2  
+# Ademas hacemos el estadistico
+t=(media1-media2)/sqrt((desviacion_tipica1^2/n1)+(desviacion_tipica2/n2))
+t
+# entonces sabemos que si son iguales no hay diferencias y en el caso de que no la marca b es mejor para comprar los neumaticos 
+```

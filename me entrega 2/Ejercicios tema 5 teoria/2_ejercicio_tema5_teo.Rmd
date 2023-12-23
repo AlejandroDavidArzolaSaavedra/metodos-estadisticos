@@ -1,0 +1,72 @@
+Cuestión 2: Una persona viaja diariamente en automóvil de su 
+casa al trabajo y tarda, con atascos diarios, de media unos 
+25.5 minutos con una desviación de 5.1 minutos. Si sale de
+casa a la 8:10 y debe estar en su trabajo a las 9:00 y trabaja 
+240 días anuales: 
+
+a) ¿Cuántos días se espera que llegue tarde? Razonar la respuesta y explicar claramente que elementos se han utilizado.
+
+b) ¿Cuál es la probabilidad de que un viaje le tome al menos media hora? 
+
+c) Evaluar una hora posible de salida para que el porcentaje
+de días que llega tarde sea inferior al 5%.  
+
+```{r}
+# a) 
+# x = minutos que tardan en llegar al trabajo un dia 
+d=240 # dias trabajados anuales
+
+# Si sale de casa a las 8:10 y trabaja a las 9:00 eso quiere 
+#decir que sela de su casa con una antelacion de 50 minutos.
+#Eso quiere decir que llegara tarde cuando tarde mas de 50 
+#minutos en llegar al trabajo por los atacos, entonces seria 
+#la probabilidad de mas de 50
+media=25.5
+dt=5.1
+x=50
+# para hallar la probabilidad de mas de 50 minutos seria 1 - 
+# la probabilidad de 50. P x > 50 
+a=1-pnorm(x,media,dt)
+a
+#Como podemos ver la probabilidad es 0.00000077939 quiere
+#decir que es muy pequeña la probabilidad de que llegue 
+#tarde con 50 minutos de antelacion
+# Y para hallar los dias pos multiplicariamos 
+#la probabilidad por los dias
+dias_tarde=a*d
+dias_tarde
+# No va a llegar ningun dia tarde por que se adelanta
+#50 minutos y de media tarda 25.5 minutos , al adelantarse
+#tanto es dificil que llegue tarde por mucho trafico que halla
+
+```
+
+```{r}
+# b)
+# La probabildad de que el viaje nos tome  al menos media hora
+#media hora es lo mismo que 30 minutos y si nos toma al menos 
+#media hora puede llegar a ser mas entonces tenemos que hallar P x > 30
+x2=30 # media hora 
+b=1-pnorm(x2,media,dt)
+b
+```
+```{r}
+# c) Posible hora para que el porcentaje de dias que llegue 
+#tarde sea inferior al 5 %
+# Que la probabilidad sea inferior al 5 % 
+# lo podemos interpretar como una probabilidad del 0.95 %
+inf_5=qnorm(0.95,media,dt)
+inf_5
+# Para que la probabilidad sea inferior al 5 % tenemos que salir 
+#34 minutos y llege tarde .
+# Luego sabiendo sabiendo que su trabajo empieza a las 9:00 
+#pos aplicamos una resta del tiempo dado menos el tiempo del trabajo
+library(lubridate )
+
+Hora_inf_5=hours(8) + minutes(26)
+Hora_inf_5
+hora1 =strptime("09:00", "%H:%M")
+hora2 = strptime("08:26", "%H:%M") 
+ difftime(hora1,hora2,units ="min")
+```
+

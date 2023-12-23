@@ -1,0 +1,222 @@
+Cuestión 1: La estatura de los 835 estudiantes de la Escuela 
+de Ingeniería Informática se distribuye según una normal de 
+media 176.5 centímetros y una desviación estándar de 7.1 centímetros.
+Encontrar cuántos de estos estudiantes se esperaría que tuvieran 
+una estatura: 
+
+a) Menor que 160 centímetros. 
+
+b) Entre 171.5 y 180 centímetros. 
+
+c) Igual a 175 centímetros. 
+
+d) Mayor o igual a 190 centímetros. 
+
+e) Analizar los resultados con R y visualizar la distribución y 
+las probabilidades de los grupos de estatura resultantes de los 
+apartados anteriores. 
+
+```{r}
+# Datos del enunciado
+n=835 # numero de estudiantes  de la escuela de ingenieria informatica
+media=176.5
+dt=7.1
+
+# a)
+# P x < 1.60
+a=160 # 1.60 centimetros 
+apartado_a=pnorm(a,mean=media,sd=dt)
+apartado_a
+
+# Para hallar el numero de individuos que cumplen que miden menos 
+# de 1.60 multiplicamos la totalidad del numero de estudiantes por 
+#la probabildiad de medir menos de 1.60
+
+menos_160=apartado_a*n
+menos_160 # es el numero de individuos 
+
+ # Tambien se podria hallar de otra manera que seria basicamente 
+# restar la media menos la altura que nos piden y despues entre
+# la deviacion tipica y luego le aplicamos un pnorm sin con esa 
+# cantidad y tendriamos el mismo resultado
+pa= (a-media)/dt
+pa # Esto es para la representacion grafica 
+
+```
+
+```{r}
+# b)
+# P 171.5 < x < 180
+b1=171.5 #171.5 centrimetros 
+b2=180 # 180 centimetros 
+ # Para hallar la probaiblidad entre 171.5 y 180 pos tenemos 
+#que restar la probabilidad de 180 a la probabilidad de que 
+# mida mas de 171.5
+apartado_b=pnorm(b2,mean=media,sd=dt)-pnorm(b1,mean=media,sd=dt)
+apartado_b
+# Para hallar el numero de individuos que cumplen que miden 
+#entre 171.5 y 1.80 multiplicamos la totalidad del numero de
+# estudiantes por la probabildiad de medir entre 171.5 y 1.80
+
+entre_171.5_180=apartado_b*n
+entre_171.5_180 # es el numero de individuos
+
+pb1=(b1-media)/dt
+pb1 # Esto es para la representacion grafica 
+pb2=(b2-media)/dt
+pb2 # Esto es para la representacion grafica 
+```
+
+```{r}
+# c) La probabilidad exacta de que mida 175 no se puede medir 
+#por que no existe la probabilidad de que mida exactamente 
+# 175.00 centimetros . Puede medir mas o menos pero exactamente 
+# no se puede hallar cuanto mide un alumno por eso la probabilidad es 0
+
+# P X = 175
+apartado_c=0
+apartado_c
+
+exacto_1.75=apartado_c*n
+exacto_1.75# es el numero de individuos 
+
+
+```
+
+```{r}
+#d)
+p_190=190
+# P > o igual a 190 es lo mismo que decir 
+# P x > 190
+ # Para hallar la probabilidad de mas de 190 
+# tenemos que restarle 1 a la probabilidad 
+# de que sea 190 
+apartado_d=1-pnorm(p_190,mean=media,sd=dt)
+apartado_d
+
+#Para hallar el numero de individuos que cumplen que miden mas
+# de 190 multiplicamos la totalidad del numero de estudiantes 
+# por la probabildiad de medir mas de 190
+
+mas_190=apartado_d*n
+mas_190# es el numero de individuos 
+
+pd=(p_190-media)/dt
+pd # Esto es para la representacion grafica 
+
+```
+
+```{r}
+# e)
+# Esta es la suma de todas las probabilidades
+suma=apartado_a+apartado_b+apartado_c+apartado_d
+suma
+
+# Esta es la suma de todas las personas que cumplen estas probabilidades 
+suma_personas=menos_160+exacto_1.75+entre_171.5_180+mas_190
+suma_personas
+
+ # La probabilidad del resto de personas que puede ser entre 160 y 
+# 171.5 y mas de 180 hasta 190 centimetros.Seria lo restante es 
+# decir restandole lo que falta para llegar a los 835 alumnos 
+resto=1-suma# Esta es la probabilidad restante 
+resto_personas=n-suma_personas
+resto_personas# resto son las personas restantes que se puede
+#hallar tambien multiplicando el resto por el numero total
+# de personas
+otra_forma=resto*n
+otra_forma # 2 forma de hallarlo 
+
+# La suma del resto mas la de las q cumplen estas condiciones 
+# acaban dado pos el resultado final que es la totalidad de 835 alumnos 
+total_personas=suma_personas+resto_personas
+total_personas
+# Para la representacion grafica
+# P 160 < x < 171.5
+p1_1=(a-media)/dt
+p1_1 # Esto es para la representacion grafica 
+p2_2=(b1-media)/dt
+p2_2 
+# P 180 < x < 190
+p18=(b2-media)/dt
+p18 # Esto es para la representacion grafica 
+p19 =(p_190-media)/dt
+p19  
+
+```
+
+
+
+
+```{r}
+# e)
+ # menor de 160 
+x<-seq(-3,3,0.01) 
+z<-seq(-3,pa,0.01) 
+p<-dnorm(z)
+z<-c(z,pa,-3) 
+p<-c(p,min(p),min(p)) 
+plot(x,dnorm(x), type="l",xaxt="n", ylab = "Densidad de Probabilidad", xlab="Altura", lwd=3) 
+
+axis(1,at=-3:3,labels=c("146","154","162","170","178","186","194")) 
+polygon(z,p,col="red", density = 20) 
+grid()
+
+# Entre 171.5 y 180 es 
+x = seq(-3,3,0.01) 
+z = seq(pb1,pb2,0.01) 
+p = dnorm(z) 
+z = c(z,pb2,pb1) 
+p = c(p,0,0) 
+plot(x,dnorm(x), type="l",xaxt="n", ylab = "Densidad de Probabilidad", xlab="Altura", lwd=1) 
+axis(1,at=-3:3, labels = c("146","154","162","170","178","186","194")) 
+polygon(z,p,col="green", density=50) 
+grid()
+
+#Mas de 190 centimetros 
+x = seq(-3,3,0.01) 
+z = seq(pd,3,0.01) 
+p = dnorm(z)
+z = c(z,3,pd) 
+p = c(p,min(p),min(p)) 
+plot(x,dnorm(x), type="l",xaxt="n",ylab = "Densidad de Probabilidad", xlab="Altura", lwd=2) 
+axis(1,at=-3:3, labels = c("146","154","162","170","178","186","194")) 
+polygon(z,p,col="red", density = 30) 
+grid()
+ # y luego esta el resto que seria entre 160 y 171.5 y mas de 180 hasta 190 centimetros.
+
+# Entre 160 y 171.5 es 
+x = seq(-3,3,0.01) 
+z = seq(p1_1,p2_2,0.01) 
+p = dnorm(z) 
+z = c(z,p2_2,p1_1) 
+p = c(p,0,0) 
+plot(x,dnorm(x), type="l",xaxt="n", ylab = "Densidad de Probabilidad", xlab="Altura", lwd=1) 
+axis(1,at=-3:3, labels = c("146","154","162","170","178","186","194")) 
+polygon(z,p,col="green", density=50) 
+grid()
+
+# Entre 180 y 190 es 
+x = seq(-3,3,0.01) 
+z = seq(p18,p19,0.01) 
+p = dnorm(z) 
+z = c(z,p19,p18) 
+p = c(p,0,0) 
+plot(x,dnorm(x), type="l",xaxt="n", ylab = "Densidad de Probabilidad", xlab="Altura", lwd=1) 
+axis(1,at=-3:3, labels = c("146","154","162","170","178","186","194")) 
+polygon(z,p,col="green", density=50) 
+grid()
+
+
+
+```
+
+
+
+
+
+
+
+
+
+

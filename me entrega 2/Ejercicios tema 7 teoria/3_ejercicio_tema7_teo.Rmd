@@ -1,0 +1,18 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+Cuestión 3: Para un control rutinario de la Consejería de Sanidad se ha tomado una muestra aleatoria de 25 tabletas de aspirina con antiácido de una cierta marca, y se ha comprobado que contiene, en promedio, 325.05 mg de aspirina en cada tableta, con una desviación estándar de 0.5 mg. Calcular los límites de tolerancia del 95% que contendrán el 90% del contenido de aspirina para esta marca. Justificar teóricamente la respuesta 
+```{r}
+#x+-ks
+probabilidad=0.95
+mg=0.5
+mg_aspirina=325.05
+limitetol=mg_aspirina-probabilidad*mg
+limitetol2=mg_aspirina+probabilidad*mg
+limitetol
+limitetol2
+
+```
+ 

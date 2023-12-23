@@ -1,0 +1,74 @@
+3.De acuerdo con un estudio sociológico realizado por 
+investigadores de la ULPGC, aproximadamente un 45% de 
+los consumidores de tranquilizantes en la provincia de 
+Las Palmas empezaron a consumirlos por problemas psicológicos.
+Calcular la probabilidad de que entre los siguientes 10 
+consumidores entrevistados de la provincia de Las Palmas: 
+ 
+a) Exactamente 4 comenzaron a consumir tranquilizantes 
+por problemas psicológicos.
+
+b) Al menos 6 comenzaron a consumir tranquilizantes
+por problemas psicológicos 
+
+c) Analizar la distribución de probabilidad subyacente 
+y sus características principales. 
+
+
+```{r}
+
+#Apartado a)
+p=0.45 #probabilidad de los consumidores de 
+# tranquilizantes en Las palmas
+q=1-p # 1 menos la probabilidad de p
+n=10 # Consumidores entrevistados
+x=4 # el numero de consumidores exactos que consumen 
+#tranquilizantes por problemas psicologicos
+a=dbinom(x,n,p)
+a
+
+```
+
+```{r}
+#apartado b)
+x2=5 # almenos 6 empezaron a consumir 
+#tranquilizantes es decir de 5 minimo 
+y=1-pbinom(x2,n,p)
+#•Otra forma de hacerlo 
+y
+h=dbinom(0:5,10,0.45)
+h_igual_a_y=1-sum(h)
+h
+
+```
+
+```{r}
+#distribucion de la probabilidad 
+# subyascente apartado c)
+
+#esperanza matematica
+E=n*p
+E
+# Sabemos que de media por lo menos 4 personas
+# de los consumidores  son por problemas psicologicos 
+#varianza
+v=n*p*q
+v
+#deviacion tipica 
+Dt=sqrt(v)
+Dt
+# Tenemos una desviacion tipica pequeña lo cual 
+#nos dice que la dispersion se encuentra cerca 
+# de la media no se encuentran los datos muy alejados entre si .
+
+```
+
+```{r}
+# apartado d
+t=0:5
+plot(t,h,xlab= "Variable Binomial", ylab= "Densidad", main = "Distribución Binomial", type = "h", col= "green")
+plot(t,h,pch=16,col="blue",type="l", ylab= "Densidad", main = "Distribución Binomial",xlab= "Variable Binomial")
+grid(10,10,lty=1)
+
+```
+

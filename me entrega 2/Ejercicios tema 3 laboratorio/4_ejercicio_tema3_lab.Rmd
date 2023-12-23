@@ -1,0 +1,86 @@
+Ejercicio 4: Consideremos una variable aleatoria que sigue
+una distribución P (x; 3). Se pide: 
+
+a) Calcular la probabilidad de que sea mayor o igual que 5.5. 
+
+b) Calcular la probabilidad de sus valores mayores o iguales a 1 
+y menores o iguales a 6.
+
+c) Obtener el percentil 75 de la distución.
+
+d) ¿Qué valor es el que deja por debajo de sí el 5% de los
+valores más bajos de la variable? 
+  
+e) Obtener una muestra de tamaño 500 de la distribución, 
+representarla gráficamente mediante un diagrama de barras
+y comparar éste con las frecuencias esperadas según el modelo
+que genera los datos. 
+
+f) Explicar la influencia del parámetro lambda en la 
+distribución y visualizar los diferentes resultados superpuestos. 
+```{r}
+ #a)Primero tenemos q calcular la probabilidad de que sea
+ #mayor o igual a 5.5
+#tenemos como datos 
+#Tenemos que hallar la probabilidad acumulativa
+# de 5.5 hasta el valor q sea 
+lambda=3 #el valor de lambda  de una variable aleatoria
+x=5.5  # valor mayor o igual de la variable
+s=1-ppois(x,lambda)
+# Es la probabildad de mayor o igual a 5.5
+
+```
+
+```{r}
+#b) Probabilidad de mayores o iguales a 1 y menores o 
+#iguales a 6.Tenemos que halar la probailidad de que 
+# incluya el valor 1 hasta 6 es decir la probabilidad 
+# de 1 hasta 6 hay que hallar la probabilidad acumulativa
+# de 6 menos la probabilidad de cero
+cero=0
+seis=6
+x= dpois(cero,lambda)
+y= ppois(seis,lambda)
+#Tenemos que restar la probabilidad de cero menos 
+#la probabilidad acumalativa de 6
+resultado=y-x
+resultado
+
+```
+
+```{r}
+#c) Para hallar el percentil 75 hacemos lo siguiente
+z=qpois(0.75,3)
+z
+
+```
+
+```{r}
+#d)
+qpois(0.05,3)
+quantile(3)
+```
+
+```{r}
+#e)
+j=rpois(500,3)
+j
+hist(j)
+Num_dias<-500
+lambda<-3 
+visitas<-rpois(Num_dias,lambda) 
+x<-1:Num_dias 
+plot(x,visitas,xlab="resultados",col="blue", ylab="distribucion", type="l") 
+points(x,visitas, col="brown")
+grid()
+
+```
+
+```{r}
+#f)
+# la influencia del lambda nos ayuda para conocer la esperanza 
+# y la valrianza de los resultados, es decir la dispersion 
+# de los datos entre si y que el valor no se alejara demasiado de ese valor
+
+```
+

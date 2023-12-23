@@ -1,0 +1,61 @@
+1.A un operador de lavado de coches se le paga en función del número de vehículos que lava. 
+Supóngase que las probabilidades de que entre las 17:00 y 18:00 de cualquier jueves cobre una 
+cierta cantidad Ci en euros vienen dadas por la siguiente tabla: 
+
+```{r}
+#Esta es la tabla con los datos principales puestos en el enunciado 
+Xi =  c(7,9,11,13,15,17)
+Fi = c(1/12,1/12,1/4,1/4,1/6,1/6)
+#Lo convertimos en data frane  
+Tabla=data.frame(Ci=Xi, Pi=Fi)
+print(Tabla)
+```
+
+```{r}
+#Calcular la ganancia esperada del operador para este tramo 
+#horario y establecer una medida coherente de su variabilidad.
+#Explicar las respuestas. La ganancia esparada del operado
+#para este tramo horario la hallamos gracias a la funcion de Probabilidad 
+#Cargamos la tabla anterior del enunciado
+attach(Tabla)
+#Vamos a convertirla en una Funcion de Probabilidad , le añadiremos 
+#la media y la varianza Multiplicamos la cantidad de euros
+#en funcion de la cantidad de coches 
+XiPi=Ci*Pi
+#Lo convertimos en data frame 
+XiPi=data.frame(XIPI=XiPi)
+# Hallamos la Varianza 
+Xi2Pi=(Ci^2)*Pi
+#Lo convertimos en data frame
+Xi2Pi=data.frame(XIecPI=Xi2Pi)
+#Con la funcion Cbind unimos estos nuevos data 
+#frame al actual que teniamos que nos dieron en el enunciado.
+funcion_de_probabilidad=cbind(Tabla,XiPi,Xi2Pi)
+
+funcion_de_probabilidad
+#Vamos a sacar los datas de la funcion para operar con ellos 
+attach(funcion_de_probabilidad)
+#Hacemos la suma de ellos 
+Media=sum(XIPI)
+Media
+#Hacemos la suma de ellos 
+Var2=sum(XIecPI)
+Var2
+#Hallamos la varianza segun la formula 
+Varianza=Var2-(Media^2)
+Varianza
+#Hallamos la desviacion tipica segun la formula 
+DesviacionTipica=sqrt(Varianza)
+DesviacionTipica
+#La ganancia esperada por el operador para este tramo horario 
+#es de 12.66667 podriamos decir unos 13 euros.
+#Y la medida coherente de su variabilidad la hallamos de la 
+#siguiente forma . Como podemos observar la desviacion tipica
+#nos sirve para hallar la dispersion de nuestros que nos indica 
+#cuanto puede alejarse nuestros valores respecto a la media hallada
+#anteriormente.Se podria decir que sirve para hallar los cambios 
+#que se producen entre los datos si son muy dispersos o no.
+#En nuestro caso nuestra desviacion estandar es muy pequeño 
+#lo tanto nuestros datos no estan muy alejados de nuestra media.
+```
+

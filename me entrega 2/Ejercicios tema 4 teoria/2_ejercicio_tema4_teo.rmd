@@ -1,0 +1,124 @@
+Cuestión 2: Se están analizando las proporciones del presupuesto que una empresa industrial del Polígono de Arinaga destina a controles medioambientales y de contaminación. Para ello se lleva a cabo un proyecto de recopilación de datos típico de Data Science. En el desarrollo de este se determina que la distribución de tales proporciones está dada por:  
+
+a) Verificar que la función de densidad anterior es válida.  
+
+b) ¿Cuál es la probabilidad de que una empresa elegida al azar gaste menos del 10% de su presupuesto en controles medioambientales y de contaminación? 
+c) ¿Cuál es la probabilidad de que una empresa elegida al azar gaste más del 50% de su presupuesto en controles medioambientales y de contaminación? 
+d) Contrastar con R los resultados y visualizar gráficamente los apartados b) y c).
+
+```{r}
+# a) y d)
+
+# a)
+ # Para verificar que la funcion de dendidad es valida 
+#al hacer la integral tenemos que comprobar que nos da 
+# 1  desde menos infinito a infinito pero en nuestra 
+# integral nos da 0 excepto pa los intervalos 1 y 0
+# una forma de solucionar la integral es multiplicando 
+# la integral por la derivada de dicha integral.
+res=(-5*(0-1/5))+(-5*(0-0/5))
+res
+# al darnos 1 hemos comprobado que se cumple su funcion de densidad 
+
+delta=0.001
+y=seq(from=-2, to=4,by=delta) 
+f_Y=function(y1){ f=rep(0,length(y1)) 
+for(i in 1:length(y1)) { if((y1[i]<=0)|(y1[i]>=1)) {fY=0} 
+else {fY=5*(1-y1[i])^4} 
+f[i]=fY }
+return(f) }
+
+plot(y,f_Y(y), col="blue", type="b", ylab = "función de densidad f(y)")
+grid()
+Valores_muestra=sample(y,50, replace=TRUE, prob=f_Y(y))
+
+min(f_Y(y)) 
+
+probabilidad_1<-integrate(f_Y,-2,4)
+probabilidad_1 
+#-----------------------------------------------------------------
+
+#d)
+probabilidad_b=0.1
+probabilidad_c=0.5
+probabilidad_2=integrate(f_Y,probabilidad_b,probabilidad_c)
+probabilidad_2 
+y_1 = 0.1 
+y_2 = 0.5 
+p = f_Y(seq(y_1,y_2,delta)) 
+z = c(y_1,seq(y_1,y_2,delta),y_2)
+p = c(0,p,0)
+polygon(z,p,col="green", density = 20.5)
+
+
+```
+```{r}
+#b)
+# la probabilidad de que una empresa gaste menos
+# del 10 ~€ de su presupuesto en controles 
+# medioambientales y de contaminacion 
+# P y < 10 % 
+# al hacer la integral nos da
+pb=-5*(((1-0.1)^5/5)-(1/5))
+pb
+
+probabilidad_2=integrate(f_Y,0,probabilidad_b)
+probabilidad_2
+
+#--------------------------------------------
+delta=0.001
+y=seq(from=-2, to=4,by=delta) 
+f_Y=function(y1){ f=rep(0,length(y1)) 
+for(i in 1:length(y1)) { if((y1[i]<=0)|(y1[i]>=1)) {fY=0} 
+else {fY=5*(1-y1[i])^4} 
+f[i]=fY }
+return(f) }
+
+plot(y,f_Y(y), col="blue", type="b", ylab = "función de densidad f(y)")
+grid()
+Valores_muestra=sample(y,50, replace=TRUE, prob=f_Y(y))
+
+min(f_Y(y)) 
+y_1 = 0 
+y_2 = 0.1 
+p = f_Y(seq(y_1,y_2,delta)) 
+z = c(y_1,seq(y_1,y_2,delta),y_2)
+p = c(0,p,0)
+polygon(z,p,col="green", density = 20.5)
+
+```
+
+```{r}
+#c)
+# la probabilidad de que gaste mas del 50 %
+# P y >50 %
+pc=(-5)*(((((1-1)^5)/5))-(1/5))*((-5)*(((((1-0.5)^5)/5))-(1/5)))
+pc
+probabilidad_2=integrate(f_Y,0,probabilidad_c)
+probabilidad_2
+
+#--------------------------------------------
+delta=0.001
+y=seq(from=-2, to=4,by=delta) 
+f_Y=function(y1){ f=rep(0,length(y1)) 
+for(i in 1:length(y1)) { if((y1[i]<=0)|(y1[i]>=1)) {fY=0} 
+else {fY=5*(1-y1[i])^4} 
+f[i]=fY }
+return(f) }
+
+plot(y,f_Y(y), col="blue", type="b", ylab = "función de densidad f(y)")
+grid()
+Valores_muestra=sample(y,50, replace=TRUE, prob=f_Y(y))
+
+min(f_Y(y)) 
+y_1 = 0 
+y_2 = 0.5 
+p = f_Y(seq(y_1,y_2,delta)) 
+z = c(y_1,seq(y_1,y_2,delta),y_2)
+p = c(0,p,0)
+polygon(z,p,col="green", density = 20.5)
+
+#--------------------------------------------------------
+```
+
+

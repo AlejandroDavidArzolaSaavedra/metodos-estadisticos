@@ -1,0 +1,35 @@
+Cuestión 4. Supóngase que las varianzas muestrales son mediciones continuas. Calcular la probabilidad de que una muestra aleatoria de 25 observaciones, de una población normal con varianza σ 𝟐𝟐= 6, tenga una varianza muestral 𝒔𝒔𝟐𝟐
+
+a) Mayor que 9.1
+
+b) Comprendida entre 3.462 y 10.745 
+
+
+```{r}
+n=25
+varianza=6
+x=n-1 # grados de libertad
+#a)
+proba=9.1
+x2=(x*proba)/varianza
+x2
+res=1-pchisq(x2,x,0)
+res
+# La probabilidad es de un 5%
+
+```
+
+```{r}
+#b)
+# p(3.462< s^2<10.745)
+prob1=3.462
+prob2=10.745
+Xib1=prob1*x/varianza
+Xib1
+Xib2=prob2*x/varianza
+Xib2
+resb=pchisq(Xib2,x,0)-pchisq(Xib1,x,0)
+resb
+# la probabilidad ees de un 94 %
+```
+

@@ -1,0 +1,44 @@
+Cuestión 5. Cierto proceso clave para el funcionamiento 
+de un CPD, tiene una tasa de errores de 0.01 cada 10 horas. 
+Modelar el comportamiento de este proceso asignándole la 
+función de distribución más conveniente y justificar el uso 
+de la misma. 
+
+a) ¿Cuál es el tiempo medio que transcurre antes del error? 
+
+b) ¿Cuál es la probabilidad de que pasen 10 días antes de 
+que se observe un error?
+
+```{r}
+#a)
+# el valor esperado para el tiempo antes de ocurrir el 1
+# error lo podemos solucionar facilmente con una regla de tres
+p=0.01 #probabilidad
+error=1
+horas=10 # cada 10 horas 
+x=horas/p
+x # horas 
+# el tiempo medio son 1000 horas antes de que ocurra el 1 error 
+```
+
+```{r}
+# b)  probabilidad de que pasen  10 dias antes de que pase un error 
+# lo primero que tenemos que hacer es aprovechar el 
+# apartado anterior y pasarlo a dias para poder trabajar con él
+dias=24
+b=10
+x2=x/dias
+x2 # dias antes de que ocurra un error 
+# x= dias antes del 1 erorr 
+# la media es 41,67 dias 
+# tenemos que hallar la p> o igual a 10
+lambda=1/x2
+lambda
+resultado=1-pexp(b,lambda)
+resultado
+# la distribucion exponenciale es un caso especial 
+# que se suele utilizar para problemas sobre tiempos 
+# de servicio y operacion
+```
+
+

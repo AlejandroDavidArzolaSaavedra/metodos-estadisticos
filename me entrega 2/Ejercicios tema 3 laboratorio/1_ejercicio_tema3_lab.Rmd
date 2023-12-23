@@ -1,0 +1,200 @@
+Ejercicio 1: Leer el Data Frame que se encuentra en el
+fichero Empleo.txt". El fichero contiene datos de un estudio 
+sobre la duración  media de semanas trabajadas de los contratos
+de empleo en la Unión Europea. Con los datos en él incluidos.
+
+a) Ordenar el data frame alfabéticamente por países
+
+b) Calcular la media, mediana y cuantiles de la duración.
+
+c) Evaluar los parámetros de dispersión de la duración.
+
+d) Ordenar los países por las semanas trabajadas.
+
+e) Visualizar las diferencias con un diagrama de caja y 
+distinguir los valores singulares. Explicar los campos de datos
+resultado del uso de la función boxplot()
+
+f) Mostrar gráficamente la situación de España en e)
+
+g) Visualizar gráficamente las variaciones entre países 
+de la UE (ordenados duración y sin ordenar) y señalar en 
+el gráfico los valores que 
+corresponde a España.
+
+h) (Opcional) El fichero  “H_T_A_UE_2017.txt” contiene los
+datos para 22 países de la UE del total del número de horas
+medio por trabajador en un año. Con sus datos, calcular la
+duración media semanal de la jornada laboral en Grecia, 
+España y Alemania. Explicar las conclusiones
+
+```{r}
+# a) Ordenar el data frame alfabéticamente por países
+
+#Lo primero que tenemos que hacer es leer el archivo en formato
+# txt y para eso lo que tenemos que hacer es invocar los codigos 
+# setwd para que nos indique la direccion de donde vamos a cojer
+# el archivo y con el read.(formato) pos leeremos el tipo de 
+# archivo que queremos leer que ene este caso es Empleo.txt.
+#Con el attach lo que conseguimos es que po
+#damos entrar dentro de los factores del texto empleo para
+#poder trabajar en ellos.
+#Para ordenarlo por Paises tenemos un comando llamado 
+# order que nos facilitara el trabajo de ordenarlo por paises
+getwd()
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_2_entrega/DATOS")
+Empleo = read.table("Empleo.txt", dec = ".",sep=",",header = T)
+EmpleoPais = Empleo[order(Empleo$Pais),]
+attach(EmpleoPais)
+print (Empleo)
+```
+
+
+```{r}
+# b) Calcular la media, mediana y cuantiles de la duración.
+# y c) Evaluar los parámetros de dispersión de la duración.
+
+#Para calcular la media la mediana y los cuartiles aplicamos 
+# los siguientes comandos:
+
+print("La media es :")
+media = mean(Duracion)
+media
+mediana = median(Duracion)
+mediana
+Quantiles = quantile(Duracion)
+Quantiles
+#Como podemos no hay mucha dispersion de duracion de los 
+#paises la concentracion se encuentra entre los 41 y los 42
+#es decir que la mayoria de la duracion de los trabajadores 
+#de la Union europea es se centra en las 41 semanas se deduce
+#que su concentracion se encuentra en 41.
+
+```
+
+```{r}
+# d) Ordenar los países por las semanas trabajadas
+#Basicamente consiste en hacer lo mismo que en el anterior 
+# pero le cambiamos la condicion del comando
+# order diciendole que sea por "duracion , los paises"
+#es decir que me ordene los paises por las semanas trabajadas
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_2_entrega/DATOS")
+Empleo = read.table("Empleo.txt", dec = ".",sep=",",header = T)
+names(Empleo)
+attach(Empleo)
+semanastrabajadas=Empleo[order(Duracion),]
+semanastrabajadas
+```
+
+
+```{r}
+#e) Visualizar las diferencias con un diagrama de caja y 
+#distinguir los valores singulares. Explicar los campos 
+#de datos resultado del uso de la función boxplot()
+#f) Mostrar gráficamente la situación de España en e)
+#Como vemos lo primero que hay que hacer es poner el 
+#comando en relacion a su duracion de semanas y lo demas
+#que añademos solo es decoracion para visualizar mejor el
+#boxplot y las caracteristicas del boxplot, el BOXPLOT
+#hace graficas de los valores datos en grupos y con el
+#podemos ver la distribucion de los datos y su centralidad o dispersion 
+
+boxplot(Duracion,col="gray" , ylab="Numero de semanas",xlab="Paises de la Union Europea")
+help(boxplot)
+grid()
+ # El comando abline se encarga de generar una linea 
+#y como anteriormente hizimos un boxplot pos el abline 
+#se realiza segu el boxplot, segun  la situacion de España
+#el col solo sirve como elemento de decoracion lo mismo
+#pasa con el lwd y el lty sirven para cambiar el tipo de
+#linea y el grosor de estas lineas.
+España=abline(h=Duracion[Pais=="España"], col="green", lwd=2, lty=1)
+#El comando text se utiliza para añadir textp en este
+#caso en la duracion del pais españa y lo que hacemos
+#es añadirle la etiqueta españa con color y el cex
+#para el tamaño de la letra
+text(1.10,y=Duracion[Pais=="España"]+0.5, labels ="España",
+col="green", cex = 1.00 )
+print(España)
+
+```
+
+```{r}
+#g) Visualizar gráficamente las variaciones entre países de la UE 
+# (ordenados duración y sin ordenar) y señalar en el gráfico los 
+# valores que corresponde a España.
+#Lo primero que hay que hacer es poder acceder a las las 
+# columnas del documentos exactamente sus nombres 
+attach(EmpleoPais)
+# El par mar c sirve par establecer los parametros de 
+#trazado.Se tienen en cuenta un parametro y es el tamaño del del
+#margen de separacion basicamente
+par(mar=c(5,5,1,1)+0.1)
+#Creamos un plot que hacen lineas en funcion de la cantidad 
+#de paises y su duracion , el xaxt sirve para suprimir 
+# los ejes de las x  es decir las semanas de los paises
+# en la zona de abajo del plot y luego lo demas son elementos decorativos
+
+plot(1:nlevels(Pais), Duracion[Pais==levels(Pais)], 
+xaxt="n", lwd=6, type="h", col="black", ylab="Numero 
+de semanas",xlab="Paises de la Union Europea")
+grid()
+#El axis sirve para especificar  el lado y la posicion de las etiquetas
+axis (side = 1, at = 1:length(Pais), labels = F) 
+#El text nos sirve para añadir texto de los paises a las 
+text(1:nlevels(Pais), par("usr")[3]-0.1, labels = Pais, srt =30, pos = 2, cex=0.6,xpd = TRUE)
+#El points nos siver con h para hacer la linea en unas cordenadas
+# especificadas en este caso en donde tenemos españa para señalarla,
+#la linea en este caso lo demas son elementos de decoracion
+points(which(Pais=="España"),Duracion[Pais=="España"], type = "h", col="green", lwd=6)
+#Este es para el punto de la punta donde alcanza su numero 
+# maximo de semanas 
+points(which(Pais=="España"),Duracion[Pais=="España"], type = "p", col="green", lwd=6)
+```
+
+
+```{r}
+attach(semanastrabajadas)
+#En este caso es lo mismo pero con la condicion de que 
+#esten ordenados los paises 
+par(mar=c(5,5,1,1)+0.1)
+plot(1:nlevels(Pais),Duracion, xaxt = "n",lwd=3, 
+type = "h", col="black", ylab="Numero de semanas"
+,xlab="Paises de la Union Europea")
+grid()
+
+axis (side = 1, at = 1:length(Pais), labels = F) 
+text(1:nlevels(Pais), par("usr")[3]-0.1, labels = Pais, srt =30, pos = 2, cex=0.8, xpd = TRUE)
+points(which(Pais=="España"),Duracion[Pais=="España"], type = "h", col="green", lwd=3)
+points(which(Pais=="España"),Duracion[Pais=="España"], type = "p", col="green", lwd=3)
+
+
+```
+
+
+```{r}
+# h) (Opcional) El fichero  “H_T_A_UE_2017.txt” contiene 
+# los datos para 22 países de la UE del total del número 
+# de horas medio por trabajador en un año. Con sus datos, 
+# calcular la duración media semanal de la jornada laboral
+# en Grecia, España y Alemania. Explicar las conclusiones
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_2_entrega/DATOS")
+Empleo = read.table("H_T_A_UE_2017.txt", dec = ".",sep=",",header = T)
+Empleo
+names(Empleo)
+España=subset(Empleo,Pais=="ESP") 
+Grecia=subset(Empleo,Pais=="GRC")
+Alemania=subset(Empleo,Pais=="DEU")
+E_G_A=rbind(Grecia,España,Alemania)
+attach(E_G_A)
+Dias=data.frame(Dias=Horas/24)
+Semanal=data.frame(Semanal=Dias/7)
+Total=cbind(E_G_A,Dias,Semanal)
+Total
+#Como podemos observar alemania es el pais con menos semanas
+# trabajadas es alemania y el pais que trabaja mas es Grecia.
+# Tambien es debido a que en alemania trabajan pero son capaces
+# de producir mas qu en el resto de paises Grecia esta el primero
+#por la alta tasa de paro que sufre por la crisis que sufre Grecia.
+```
+

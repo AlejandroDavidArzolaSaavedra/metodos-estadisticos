@@ -1,0 +1,144 @@
+Ejercicio 2: Leer el data frame que se encuentra en el 
+fichero "Puromicina.txt". El fichero contiene datos de un 
+estudio sobre la velocidad de reacción enzimática 
+(en número de cuentas por minuto) en función de la concentración
+de sustrato (en partes por millón –ppm-) en experimentos donde 
+se trataba la enzima con Puromicina ("treated") o no se trataba
+con esta ("untreated"). Con los datos en él incluidos.
+
+a) Calcular, las medias de la velocidad de reacción en función 
+del empleo o no de Puromicina.
+
+b) Evaluar los parámetros de dispersión de la de la velocidad de reacción.
+
+c) Visualizar si la concentración del sustrato influye en la 
+velocidad de reacción en los casos en que se trata o no con Puromicina.
+
+d) Ordenar por velocidad de reacción.
+
+e) Analizar los efectos del uso de la Puromicina  y de la 
+concentración del sustrato en la velocidad de reacción. Realizar algunas predicciones.
+
+f) Analizar el fichero “Puromicina_NA.txt” que contiene NAs y utilizar 
+las funciones na.omit y complete.cases para evaluar el apartado 
+a). ¿Qué conclusiones se pueden sacar? ¿Cómo afectaría el resultado si 
+se sustituyen los NAs por ceros?
+
+```{r}
+# a)
+#lo primero que hacemos es llamar a la direccion en la 
+# que tenemos el documentos y separarlas por las comas 
+# los decimales con puntos y por ultimo que lea los titulos
+
+getwd()
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_2_entrega/DATOS")
+puromicina = read.table("Puromicina.txt", sep = ",", dec = ".", header = T)
+#Con el attach podemos acceder a las factores del archivo y poder
+#modificar cosas en el 
+names(puromicina)
+attach(puromicina)
+#Con el aggregate lo que hemos hecho es dividir los casos en los 
+# que la puromicna ha sido tratada y no ha sido tratada y 
+# la velocidad de la reacciones quimicas
+# de la concentracion de sustrato 
+medias=aggregate(velocidad_reaccion~Puromicina,puromicina, mean)
+medias
+puromicina
+
+```
+```{r}
+# b) Evaluar los parámetros de dispersión de la de la 
+# velocidad de reacción.
+Quantiles = quantile(velocidad_reaccion)
+Quantiles
+sd(velocidad_reaccion)
+mean(velocidad_reaccion)
+median(velocidad_reaccion)
+#como podemos ver la mayor concentracion de velocidades 
+#de reaccion se en en los 124 ppm , se puede observar que 
+# hay una gran candtidad dispercion entre las velocidades 
+# de reaccioi desde 47 hasta 207  
+# El rango intercuatilico se encuentra entre el 3 y el 1
+```
+
+
+```{r}
+#c) Visualizar si la concentración del sustrato influye 
+# en la velocidad de reacción en los casos en que se trata
+# o no con Puromicina.
+names(medias)
+medias<-aggregate(velocidad_reaccion~Puromicina,puromicina, mean)
+medias2<-aggregate(concentracion~Puromicina,puromicina, mean)
+medias
+medias2
+```
+
+```{r}
+#d) Ordenar por velocidad de reacción.
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_2_entrega/DATOS")
+Empleo = read.table("Puromicina.txt", dec = ".",sep=",",header = T)
+names(Empleo)
+semanastrabajadas=Empleo[order(velocidad_reaccion),]
+semanastrabajadas
+
+
+```
+
+```{r}
+# e)
+# Lo primero que haremos sera realizar un plot en el que 
+# comparraemos la conenctracion y la velocidad de los
+# tratados con puromicina lo demas son elementos decorativos.
+plot(concentracion[Puromicina=="treated"],
+     velocidad_reaccion[Puromicina=="treated"], col="black", pch=19,
+     xlab ="Concentración Sustrato (ppm)", ylab = "Velocidad de Reacción (counts/min/min)" )
+
+# Modelo
+yt=velocidad_reaccion[Puromicina=="treated"]
+xt=concentracion[Puromicina=="treated"]
+ # Aplica el modelo de regresion lineal para poder predecir
+# futuros resultados de la evolucion de la aplicacion de la puromicina
+modelo_treated<-lm(yt~xt+I(xt^(1/2)))
+# la secuencia que seguira la linea como ira avanzando linealmente
+xv=seq(from=0,to=1.1, by=0.01)
+# que me predija los posibles movimientos segun la secuencia anterior 
+yv=predict(modelo_treated, list(xt=xv))
+# Esto sirve para poner una linea de la secuancia anterior 
+lines(xv,yv,col="green")
+# Esto nos sirve para poner los puntos de concentracion y velocidad que casos tenemos
+points(concentracion[Puromicina=="untreated"],
+       velocidad_reaccion[Puromicina=="untreated"], col="blue", pch=19)
+# Aqui aplicamos lo mismo pero para el caso de los no tratados 
+ynt=velocidad_reaccion[Puromicina=="untreated"]
+
+xnt=concentracion[Puromicina=="untreated"]
+
+modelo_untreated=lm(ynt~xnt+I(xnt^(1/2)))
+
+ynv=predict(modelo_untreated,list(xnt=xv))
+
+lines(xv,ynv, col="purple")
+```
+
+
+```{r}
+#f)
+getwd()
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_2_entrega/DATOS")
+Puromicina_Na<-read.table("Puromicina_NA.txt", sep = ",", dec = ".", header = T)
+Puromicina_sin_na=na.omit(Puromicina_Na)
+Puromicina_Na
+Puromicina_sin_na
+attach(Puromicina_sin_na)
+#Con el aggregate lo que hemos hecho es dividir los casos 
+# en los que la puromicna ha sido tratada y no ha sido tratada 
+#y la velocidad de la reacciones quimicas de la concentraciond e sustrato 
+media=aggregate(velocidad_reaccion~Puromicina,Puromicina_sin_na, mean)
+media
+#Como podemos ver tenemos menos cantidad de pruebas de reaccion
+# enzimatica pero aun asi sigue siendo superior la velocidad 
+# de los tratados a los no tratados.
+#GSPC
+set.seed(8)
+```
+

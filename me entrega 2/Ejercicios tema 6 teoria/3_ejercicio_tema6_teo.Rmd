@@ -1,0 +1,95 @@
+Cuestión 3. La empresa “Tirma” ha puesto en marcha un proceso en el que se utiliza una máquina para llenar envases de cartón con batido de chocolate. La especificación que es estrictamente indispensable para el llenado de la maquina es 900 ± 150 gramos. El proveedor considera que cualquier envase de cartón que no cumpla con tales límites de peso en el llenado esta defectuoso. Se espera que al menos 99% de los envases de cartón cumplan con la especificación. En el caso de que μ = 900 y σ = 100,  
+
+a) ¿Qué proporción de envases de cartón del proceso están defectuosos? 
+
+b) Si se hacen cambios para reducir la variabilidad, ¿cuanto se tiene que reducir σ para que haya 0.99 de probabilidades de cumplir con la especificación?  
+
+c) ¿Cuál será el tamaño de muestra para que en este segundo caso se garanticen las especificaciones? 
+
+d) Visualizar gráficamente con R los casos a) y b) 
+
+Supóngase una distribución normal para el peso. Razonar convenientemente y justificar las respuestas
+
+```{r}
+# a) Se trata como una distribucion normal
+# x= batido de chocolate en gramos envasado
+# x ~ N(media=900,desviacion_estandar=100)
+No_defectuosos="P ( 750 < x < 1050)"
+n1=750
+n2=1050
+media=900
+desviacion_estandar=100
+h=pnorm(n2,media,desviacion_estandar)-pnorm(n1,media,desviacion_estandar)
+h # Esta se trata de la probabilidad de que no sea defectuoso
+defectuosos=1-h
+defectuosos # la probabildiad de que salga defectuoso
+# La proporcion de envases de carten del proceso que estan  no defectuosos son del 86 %  y defectuoso del 13 como podemos notar se trata de una probabilidad alta de que nos salga defectuosos nuestros envase de batido de chocolate 
+```
+
+```{r}
+#b) # Ahora nos poden cuanto se tiene que reducir sigma para que haya un 0.99 % de probabilidades de cumplir con la especificacion
+# P(k1 < x < k2)=0.99
+# P(750 < x < 1050)=0.99
+ # P(x> k2)=0.05
+ # P(x< k2)=0.0995
+qnorm(0.995) # Probabilidad a la izquierda
+qnorm(0.005) # 
+z1=2.575829
+#z=k2-media/varianza
+z2=-2.575829
+desvi1=(n2-media)/z1
+desvi2=(n1-media)/z2
+desvi1
+desvi2
+#La desviacion tipica se tiene que reducir hasta 58,23 Para que la probabilidad sea de un 0.99 % 
+# Se ha reducido
+Reduccion=desviacion_estandar-desvi1
+Reduccion # Es lo que se ha reducido  
+
+
+```
+
+```{r}
+#c)
+#Tamaño de muestra
+#Se trata de una distribucion de media muestral
+# X~ N(Media,disviacion/sqrt(n))= (900, 100/sqrt(n))
+# Esta vez se tiene que aplicar con una probabildiad del 99 % 
+h=qnorm(0.995)
+h
+# z = 1050-900/100/sqrt(n)
+# 2.57*100/sqrt(n)=150
+n=(h*desviacion_estandar)/(n2-media)
+n
+n=n^2
+n
+# n tiene que ser 3 envases para que se cumpla con esta probabilidad 
+#por que la probabilidad como vimos al principio era de un 13 % entonces mientras mas envases cojamos mas posibilidades habra de que nos salga defectuoso el envase 
+```
+
+```{r}
+# d)
+mu<-media 
+sigma<-desviacion_estandar 
+Z_160<-(n1-mu)/sigma 
+Z_160
+
+mu<-media 
+sigma<-desviacion_estandar
+Z_185<-(n2-mu)/sigma 
+Z_185 
+1-pnorm(Z_185) 
+pnorm(Z_185)-pnorm(Z_160) 
+
+x<-seq(-3,3,0.01) 
+z<-seq(Z_160, Z_185,0.01) 
+p<-dnorm(z) 
+z<-c(z,Z_185,Z_160) 
+p<-c(p,0,0) 
+plot(x,dnorm(x), type="l",xaxt="n", ylab = "Densidad de Probabilidad", xlab="batido de chocolate en gramos envasado", lwd=3) 
+axis(1,at=-3:3, labels = c("600","700","800","900","1000","1100","1200")) 
+polygon(z,p,col="green", density=50) 
+grid()
+
+```
+

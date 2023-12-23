@@ -1,0 +1,259 @@
+Ejercicio 4. Obtener del Instituto Canario de Estadística 
+(ISTAC) el fichero con los datos de empleo en actividades 
+relacionadas con la Ingeniería Informática (códigos de rama 
+de actividad CNAE-09: 62,63 y 95) en Canarias por trimestres
+en el periodo 2009 a 2018. (ojo con el formato de los datos 
+y los separadores de decimales). Se pide 
+
+a) Analizar gráficamente la variación de cada tipología de 
+empleo en las Islas Canarias (por islas y totales) en el 
+periodo considerado e intentar explicar sus valores singulares. 
+b) Utilizando la librería mgcv(), encontrar un modelo de 
+seguimiento del empleo  representar gráficamente su 
+evolución y predicciones (efectuar una posible a diciembre de 2018).  
+c) Encontrar la isla donde hay más empleo y en qué etapa. 
+d) Analizar comparativamente la evolución durante dos años 
+del empleo en dos islas diferentes y explicar sus variaciones
+y sus aspectos comunes. 
+
+
+```{r}
+# a)
+#Cargamos el directorio donde tenemos el archivo
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_2_entrega/DATOS")
+# leemos el csv y le indicamos que se separa por ; y que tiene 
+#titulo para que no lo convierta en caracteres 
+datos_empleo = read.csv("Empleos_Informatica_Canarias_2009-18.csv"
+, header = T, sep = ";")
+ # Intentamos acceder a los datos  nombres del csv para poder
+# luego trabajar con ello 
+attach(datos_empleo)
+# Seleccionamos el la columna 2 de los la codigo del cnae 62 
+# es decir seleccionamos la columna de canarias 
+canarias_62=datos_empleo[TRIMESTRES=="CNAE_62",2]
+canarias_62
+datos_empleo
+# la secuencia va al reves de mayor a menor 
+index=seq(length(canarias_62),1,-1)
+canarias_62_t<-canarias_62[index]
+canarias_62_t
+# El plot sirve para hacer puntos de representaciones de numeros  des
+plot (1:length(canarias_62), canarias_62_t, xaxt = "n", type = "l",
+xlab = "Año", ylab = "Número Personas Empleadas CNAE 62",
+ylim = c(0,max(canarias_62_t)), col="green", lwd=2)
+# Sirve para hacer los cuadritos en el plot 
+grid()
+# Con years lo que hacemos es que estamos escribiendo encima 
+# del plot anterior los años que tiene  este codigo 
+years=c("2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018")
+ # El axis sirve para escribir las lineas que hay encima de
+# los años ,para verlo de mejor manera mas visual, lo que 
+# hace es añadir ejes al grafico actual.va desde 1 a 40 
+# de 4 en 4 por que 4 trimestres es lo mismo que 1 año  y
+# asi podemos ver las lineas en los años, en las etiquetas
+# years que son los años 
+axis (side = 1, at = seq(1,length(canarias_62),4),
+labels = years)
+ # Seleccionamos el trimeste de tenerife para hacer
+# una comparacion
+tenerife_62=TENERIFE[TRIMESTRES=="CNAE_62"]
+# Seleccionamos el trimestre de gran canaria segun 
+# el codigo del cnae_62
+gran_canaria_62=GRAN.CANARIA[TRIMESTRES=="CNAE_62"]
+# Lo que hacemos ahora es representar en el plot anterior 
+# una linea negra q representa los empleos que hubo en tenerife 
+# los ultimos años,tenemos que poner la misma longitud de datos 
+# tanto en x como en y por eso ponemos de 1 a longitud de 
+#canarias_62 por que llega a 40 y los datos de tenerife  
+# segun el CNAE_62 son de esa misma longitud 
+points(1:length(canarias_62),tenerife_62[index],
+ type = "l", col="black" )
+# Aqui hacemos lo mismo pero  con el caso de canarias 
+# especificamente  para poder visualizarlo
+points(1:length(canarias_62),gran_canaria_62[index], type = "l", col="red" )
+# Como podemos ver Gran canaria  tenia mayor empleo en 
+#las actividades de ingenieria informatica hasta mitad del 2013,
+# que hubo un bajon importante que en Tenerife no se vio 
+# reflejado y podemos visualizar como tenerife actualmente tiene 
+# mas empleo que gran canaria .Las causas son desconocidas,
+# aunque se podria sospechar las crisis economica española que 
+# termino en el 2014, donde españa sufrio la peor crisis con el
+# paro  y Gran canaria fue una de las islas que fue gravemente  
+# afectada por ello.
+# Luego por otra parte tambien se puede reflejar como hay un 
+# crecimiento desde esa epoca 
+
+```
+
+b) Apartado
+
+```{r}
+# b) #Aqui lo que hacemos es un modelo de seguimiento de 
+# trabajo segun este codigo cnae para poder predecir sus 
+# futuras respuestas o cantidades 
+#Realizamos un plot que valla desde 1 hasta la longitud
+# que tenga canarias del codigo cnae 62 y luego los demas 
+# elementos son decorativos
+plot (1:length(canarias_62), canarias_62_t, xaxt = "n", pch=16,
+xlab = "Año", ylab = "Número Personas Empleadas CNAE 62",
+ylim = c(0,max(canarias_62_t)),col="#009E73", lwd=2)
+# En cuanto al ylim son los limites que tiene de y que 
+# tiene que coincidir con los de x son los maximos de
+# canarias segun el codigo 62
+grid()
+# El grid es para hacer los cuadros
+ # El years sirve para hacer una secuencia de los años 
+# en los forma parte canarias 
+years=c("2009", "2010", "2011", "2012", "2013", "2014", 
+"2015", "2016", "2017", "2018")
+# el axis plotea en el rango x las lineas que forman 
+#parte de los trimestres que forman 1 año  con el codigo cnae 62
+axis (side = 1, at = seq(1,length(canarias_62),4),
+labels = years)
+x=index
+#Esto se trata de un modelo de regresion lineal que sirve para 
+# poder hacer una prediccion del futuros intervalos que vallan
+# a ocurrir seun los datos dados 
+modelo_62=lm(canarias_62~x+I(x^2)+I(x^3))
+xv=x
+# la funcion predict sirve para hacer predicciones  
+# a partir del resultado de varias funciones segun un modelo
+yv=predict(modelo_62,list(x=x))
+lines(xv,yv,col="red", lwd=2)
+# Esto hace referencia a la prediccion exacta exactamente en el año 2018
+yv2018=predict(modelo_62,list(x=x[2]))
+# lines  sirve para hacer los puntos hasta abajo y lo demas es 
+# decorativo y points para hacer exctamente el punto donde predice
+# la regresion lineal
+points(x[2],yv2018, pch=16, col="#E69F00")
+lines(c(x[2],x[2]),c(0,yv2018), col="#E69F00",lty=3, lwd=3)
+
+yv2018
+# Como se puede observar nuestro modelo de regresione es ascendente 
+# tira para arriba eso quiere decir que el trabajo en este codigo
+# cnae pos tiene frutos va en ascenso , se encuentra en auge y 
+#podremos predecir que seguira asi los proximos años 
+
+```
+
+
+
+```{r}
+#c) # Aqui lo que hacemos es una comparacion de la actividad 
+# de empleados en este codigo tanto en las islas canarias en 
+# general como en especifico en gran canaria y tenerife 
+
+ # Hacemos una referencia a los trismestres del cogigo del
+# cnae 63 de canarias 
+canarias_63<-datos_empleo[TRIMESTRES=="CNAE_63",2]
+ # index lo que hacemos que es colocamos de manera inversa 
+# la longitud de canarias de mayor a menor
+
+index=seq(length(canarias_63),1,-1)
+index
+canarias_63_t=canarias_63[index]
+
+plot (1:length(canarias_63), canarias_63_t, xaxt = "n", type = "l",
+xlab = "Año", ylab = "Número Personas Empleadas CNAE:63",
+ylim = c(0,max(canarias_63_t)),col="green", lwd=2)
+# El grid es para hacer los cuadritos 
+grid()
+# years es una etiqueta para hacer referencia a los años 
+years=c("2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018")
+#ploteamos las etiquetas de los años de 4 en 4 por que
+# son los semetres para formar 1 año 
+axis (side = 1, at = seq(1,length(canarias_63),4),labels = years)
+ # hacemos una referencia a los trimestres de tenerife con el codigo del cnae 63
+tenerife_63=TENERIFE[TRIMESTRES=="CNAE_63"]
+# hacemos lo mismo pero con gran canaria 
+gran_canaria_63=GRAN.CANARIA[TRIMESTRES=="CNAE_63"]
+#Aqui lo que hacemos es representen las lineas tanto 
+# de gran canaria como de tenerife segun su longitud 
+# segun el codigo de cnae 63
+points(1:length(canarias_63),tenerife_63[index], type = "l", col="black" )
+points(1:length(canarias_63),gran_canaria_63[index], type = "l", col="yellow" )
+#Podemos observar que en este codigo cnae en gran 
+# canaria en el 2010 ocurrio algo que hizo que provocara
+# que se redujeran los empleados en este sector a en 
+# comparacion de tenerife que estaba subiendo y a logrado 
+# a tener picos altos como se puede ver a mitad del 2015 
+# lo que se puede apreciar tambien es que las islas canarias 
+# en general tiene sus movimientos u oscilaciones son muy 
+# parecidas a las de tenerife lo que nos quiere decir que 
+# tenerife tiene una gran influencia en cuanto a este 
+# codigo anque las demas islas tambien lo tienen pero 
+# no tan a gran escala.
+```
+
+
+
+```{r}
+# para hallar el maximo de canarias 
+# con el codigo 63
+max(canarias_63)
+# lo que hacemos ahora es restarle a la longitud 
+# el maximo de canarias 63 y aplicarle la division 
+# entre 4 para tener los años y luego sumarselos y 
+# sumarle 2009  por que el parametro estaba en meses 
+am=(length(canarias_63)-which.max(canarias_63)) %/% 4 + 2009  # %/% división entera
+am
+#  Esto hace referencia al modulo de la 
+# division  para hallar el resto para saber los meses exctamente 
+tm=(length(canarias_63)-which.max(canarias_63)) %% 4  
+tm
+# imprimimos un frase para darle instroduccion
+am_char=c("Año Contratación máxima histórica Canarias en CNAE 63:",
+# convertir el numero es caracter y lo mismo con el 
+as.character(am),"Trimestre:", as.character(tm))
+# se imprime el char, la frase 
+print(am_char)
+# Aqui lo que hemos hecho es encontrar en que 
+#etapa de los ultimos años ha habido mas empleo
+```
+
+
+
+
+```{r}
+# d) 
+# lo primero que hacemos es hacer una referencia 
+#a las cantidades que tenemos dentro del codigo
+# del cnae 62 de tenerife para cojer los ocho primeros  de menor a mayor 
+tenerife_62_2y<-tenerife_62[8:1]
+tenerife_62_2y
+# hacemos lo mismo con gran canaria
+gran_canaria_62_2y<-gran_canaria_62[8:1]
+gran_canaria_62_2y
+
+# hacemos un plot para representar las cantidades de 
+#gran canaria en codigo cnae 62 luego lo demas son 
+#elementos decorativos y le aplicamos como limite 
+#empieze con el minimo de grancanrai y y acabo con 
+#el maximo de tenerife 
+plot (1:8, gran_canaria_62_2y, xaxt = "n", pch=16,type = "b",
+xlab = "Años", ylab = "Número Personas Empleadas CNAE 62",
+ylim = c(min(gran_canaria_62_2y),max(tenerife_62_2y)),
+col="green", lwd=2); grid()
+# la refencia a los años 2017 2018
+years=c("2017", "2018")
+ # Con el axis se plotean las lineas de abjo en las 
+#secuencias en la etiqueta de los años 
+axis (side = 1, at = seq(1,8,4), labels = years)
+# aqui se situa donde queremos q este el texto de 
+#isla de gran canaria en que sitio exactamente y el color y tamaño
+text(3,1500,labels = "Isla de Gran Canaria", col="green", cex=1.25)
+# Points sirve para que visualmetne veamos los puntos 
+#que hacen referencia a las cantidades exactas de tenerife 
+points(1:8,tenerife_62_2y, type = "b", col="black",pch=16, lwd=2 )
+ # Lo mismo que hizimos con gran canaria se hace con tenerife 
+text(6,2100,labels = "Isla de Tenerife", col="purple", cex=1.25)
+ #A qui lo que podemos ver es una comparacion entre gran 
+#canaria y tenerife en el año 2017 y el 2018 y como en 
+#tenerife hay muchisimo mas empleo que en gran canaria, 
+# lo que nos quiere decir que existe mas demanda de empleo 
+# en tenerife que en gran canaria segun este codigo cnae 62
+# por lo menos estos dos ultimos años, eso para futuros 
+# informaticos es muy util saberlo a la hora de plantearse
+# donde probablente tengas mas posibilidades de conseguir futuro trabajo
+```
+

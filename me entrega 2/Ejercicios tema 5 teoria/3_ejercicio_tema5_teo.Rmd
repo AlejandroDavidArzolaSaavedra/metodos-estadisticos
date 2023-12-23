@@ -1,0 +1,41 @@
+Cuestión 3: Una práctica común de las aerolíneas de “bajo coste” 
+es vender más billetes (pasajes de ida sólo) que el número total
+de plazas disponibles en un vuelo específico, pues los clientes 
+que compran los billetes no siempre se presentan al vuelo. 
+Supóngase que el porcentaje de pasajeros que no se presentan a 
+la hora de salida del vuelo es del 1.9 %. Para un vuelo 
+determinado con 185 plazas, se vendieron un total de 196 billetes.
+
+a) ¿Cuál es la probabilidad de que la compañía aérea haya sobrevendido
+el vuelo?
+
+b) Razonar sobre la distribución de probabilidad subyacente y, 
+en su caso, sobre las posibles simplificaciones. 
+
+```{r}
+# x=nº de psajaeros que no se presentan al vuelo 
+# si el porcentaje de pasajero que no se presentan a la hora de 
+# salida del vueloe s del 1.9%
+n=196
+p=1.9/100
+# Cuando se hace un vuelo normalmente se venden mas billetes
+# que plazas disponibles por los pasajeros que suelen faltar ,
+# que suele ser 1.9 % si vienen todos se produce lo conocido 
+# como overbooking 
+
+# a) y b) 
+# Como tiene 185 plazas y se venden 196 billetes tenemos 
+# que hallas la probabilidad de que sea mayor o igual 11
+# P x => 11
+plaza=10
+probabilidad_overbooking=1-pbinom(plaza,n,p)
+probabilidad_overbooking
+# probabilidad de que haya sobrevendido el vuelo es 
+# muy baja practicamente nula,Entonces se entiende que 
+# sobrevendan algunas plazas de los vuelos por que la 
+# probabilidad al ser tan baja practicamente se estarian 
+# asegurando mas dinero del que perderian,es una manera 
+# de utilizar las plazas de los aviones de manera mas eficiente.
+
+```
+

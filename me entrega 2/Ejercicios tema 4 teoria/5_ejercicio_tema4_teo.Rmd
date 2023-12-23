@@ -1,0 +1,100 @@
+Cuestión 5: Se sabe como resultado de análisis previos 
+que el 3.5% de las personas que se les revisa el equipaje
+en el aeropuerto de Gran Canaria llevan objetos cuestionables.  
+ 
+a) ¿Cuál es la probabilidad de que una serie de 15 personas 
+cruce sin problemas antes de encontrar a una que tenga un 
+objeto no permitido para embarcar con él?
+
+b) ¿Cuál es el número esperado de personas que pasarán 
+normalmente hasta que se pare en una por tener un objeto 
+de estas características? 
+  
+#c) Razonar sobre la distribución de probabilidad 
+subyacente y explicar su uso y características más significativas. 
+
+d) Si por cada caso de una persona sin problemas en el equipaje
+el tiempo medio es de 1 minuto y por cada caso de una persona
+con objetos no adecuados el tiempo medio se alarga a 5 minutos, 
+analizar los tiempos probables medios de espera para un vuelo 
+de 120 pasajeros. 
+
+e) Comprobar con R los resultados anteriores, mostrar 
+gráficamente las funciones de distribución de probabilidad
+correspondientes y visualizar explícitamente en caso del apartado d).
+
+```{r}
+#a)
+p=0.035
+persona=15
+1-pgeom(persona,p)
+
+```
+
+```{r}
+#b) y c)
+#el numero esperado seria 
+casop=0.035
+casoq=0.965
+esperanza=casoq/casop
+esperanza # tratata sobre el numero esperado de personas 
+# que parsaran normalmente hasta que tenga un objeto 4
+# de estas caracteristicas 
+# el numero esperado es de 28 personas 
+casop2=casop*casop
+varianza=casoq/casop2
+varianza
+dt=sqrt(varianza)
+dt #tenemos una gran desviacion tipica eso quieredecir 
+ # que tenemos bastante dispersion entre los datos 
+ #de las personas que llevan objetos cuestionales en relacion con la media 
+```
+
+```{r}
+
+#d)
+#debemos dividir el enunciado en dos partes las personas 
+# con objetos no adecuados y las personas sin problemas
+#-----------------------------------------------------
+x1=120 # numero de pasajeros
+w=5 # minutos por cada caso de personas con objetos no adecuados
+P=0.035 # probabilidades de los objetos no adecuados 
+m1=x1*P
+m1
+mt1=m1*w # por que tarda 5 minutos por cada caso 
+mt1
+#-----------------------------------------------------
+x2=120 #numero de pasajeros
+w2=1 #tiempo
+Q=0.965 #el restante de probabilidades de los casos sin problemas
+m2=x2*Q
+m2
+mt2=m2*w2 # por que tarda un minuto por cada caso
+mt2
+#-----------------------------------------------------
+#Terminamos sumando los dos casos para saber el total final 
+# de los tiempos totales de los 120 pasajeros
+final=mt1+mt2
+final
+
+```
+
+```{r}
+
+#e) 
+
+x<-pgeom(0:120,P) 
+plot(x,xlab= "Número de pasajeros", ylab = "P(X<=x)", 
+     col="blue", type = "h",main= "Funcion de  Distribucion de probabilidad") 
+points(0:120,x,col="brown") 
+grid()
+
+y<-pgeom(0:120,Q) 
+plot(y,xlab= "Número de pasajeros", ylab = "P(X<=x)", col="blue",
+     type = "h", main= "Funcion de  Distribucion de probabilidad") 
+points(0:120,y,col="brown") 
+grid()
+
+
+```
+

@@ -1,0 +1,91 @@
+Ejercicio 3:  El 2% de los equipos de un cierto fabricante
+de ordenadores tienen un fallo por mes de utilización y
+ningún ordenador tiene más de una avería por mes. El
+Departamento de Informática de la ULPG decide adquirir 
+150 de estos equipos. Se pide: 
+ 
+a) Analizar el tipo de función de probabilidad subyacente
+y explicar sus características. 
+
+b) Calcular la probabilidad de que el número de averías sea de 5. 
+
+c) Encontrar la probabilidad de que el número de averías sea mayor o igual a 3. 
+
+d) ¿Qué valor de la variable deja por debajo de sí el 75% de la probabilidad?
+  
+e) Encontrar el número mínimo n tal que la probabilidad de que el número de averías sea superior a 0.99 
+
+f) Calcular el percentil 95% de la distribución. 
+
+g) Obtener una muestra de tamaño 1000 de esta distribución. 
+
+h) Representar gráficamente la muestra de g) mediante un
+diagrama de barras y comparar éste con las frecuencias esperadas 
+según el modelo que genera los datos.
+
+
+```{r}
+#a)
+#hallamos la esperanza
+ordenadores=150
+probabilidad=0.02
+esperanza=ordenadores*probabilidad
+esperanza
+q=0.98
+varianza=ordenadores*probabilidad*q
+varianza
+dt=sqrt(varianza)
+dt
+res=esperanza/dt
+res
+```
+
+```{r}
+
+#b) probabilidad de que el numero de averias sea 5
+dato=5
+dbinom(x=dato,size=ordenadores,prob=probabilidad)
+
+```
+
+```{r}
+#c) probilidad de que el numero de averias sea mayor o igual a 3 
+ordc=2
+
+x=1-pbinom(ordc,ordenadores,probabilidad)
+x
+
+```
+
+```{r}
+#d)
+qbinom(0.75,ordenadores,probabilidad) 
+
+```
+
+```{r}
+#e)
+qbinom(0.99,ordenadores,probabilidad) 
+
+```
+
+```{r}
+# f)
+s=qbinom(0.95,ordenadores,probabilidad)
+s
+
+```
+
+```{r}
+#g) y h)
+muestras=1000
+g=rbinom(ordenadores,muestras,probabilidad) 
+#---------------------------------
+Valor=max(g)+1
+Valor
+hist(g,breaks=-0.5:Valor,freq = FALSE, main="Histograma vs Función Densidad")  
+
+points(0:Valor,dbinom(0:Valor,muestras,0.02), col="brown") 
+lines(0:Valor,dbinom(0:Valor,muestras,0.02), col="blue")  
+```
+

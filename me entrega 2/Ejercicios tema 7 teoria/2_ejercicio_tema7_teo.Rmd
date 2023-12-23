@@ -1,0 +1,59 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+Cuestión 2: Una máquina para un taller de la zona industrial del Cebadal produce piezas metálicas de forma cilíndrica para aparatos de aire acondicionado. Se toma una muestra de las piezas y los diámetros de las mismas son 1.01, 0.97, 1.03, 1.04, 0.99, 0.98, 0.99, 1.01 y 1.03 centímetros.  
+
+a) Calcular un intervalo de confianza del 99% para la media del diámetro de las piezas que se manufacturan con esta máquina, establézcase las acotaciones necesarias y razónense las respuestas. 
+
+b) ¿Se podría realizar alguna inferencia sobre la varianza poblacional? 
+
+```{r}
+#a)
+# La muestra es de 1.01, 0.97, 1.03, 1.04, 0.99, 0.98, 0.99, 1.01 y 1.03
+# Calcular la media
+n=9
+x=c(1.01, 0.97, 1.03, 1.04, 0.99, 0.98, 0.99, 1.01 , 1.03)
+mu<-mean(x);mu
+sigma<-sd(x);sigma 
+n<-length(x);n 
+hist(x,main="",nclass=9,freq=FALSE, ylab="Densidad", xlab="diametro de las piezas metalicas ", density = 10.5, col="green", border = "brown")
+#1-alfa
+Ic1<-mu-qt(0.995, df=(n-1))*sigma/sqrt(n) 
+Ic2<-mu+qt(0.995, df=(n-1))*sigma/sqrt(n) 
+cat(c("lím.Inf. IC 99%=", as.character(round(Ic1,3)), " lím.Sup. IC 99% =", as.character(round(Ic2,3))))
+t.test(x,conf.level=0.95)
+```
+```{r}
+# IC= (a , b )
+# mu+- error == mu+-desviacion tipica 
+suma=sum(x)
+sumatorio=sum(x^2)
+sumatorio
+s=(9*sumatorio)-(suma^2)/(9*8)
+s
+qchisq(0.02, 8)
+qchisq(0.98, 8)
+PT<-seq(-0.5,20,0.001) 
+Alfa<-0.04 
+n<-9
+s2<-s
+DP<-dchisq(PT, n-1) 
+plot(PT,DP, type = "l", col="brown", ylab = "Densidad de Probabilidad", xlab = "Estadístico") 
+xliminf<- (n-1)*s2/ qchisq((1-Alfa/2), n-1) 
+xlimsup<- (n-1)*s2/ qchisq(Alfa/2, n-1)
+chixliminf<-(n-1)*s2/xlimsup 
+chixlimsup<-(n-1)*s2/xliminf
+grid() 
+xv<-PT[PT>=chixliminf & PT<=chixlimsup] 
+yv<-DP[PT>=chixliminf & PT<=chixlimsup] 
+xv<-c(xv,chixlimsup,chixliminf) 
+yv<-c(yv,DP[1],DP[1])
+polygon(xv,yv,col = "green", density = 50, border = "brown") 
+abline(v=chixlimsup,col="blue",lty=2) 
+abline(v=chixliminf,col="blue",lty=2)
+
+
+```
+

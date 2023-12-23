@@ -1,0 +1,63 @@
+Cuestión 4: El número de clientes que llega al departamento
+de reclamaciones de “MediaMark” en el centro comercial Las 
+Terrazas es de 5 cada veinte minutos. Establecer un modelo 
+de la posible distribución de probabilidad y explicar sus 
+Así mismo, con este modelo:  
+ 
+a) Calcular la probabilidad de que lleguen mas de 10 
+clientes en un periodo de una hora.
+
+b) Calcular la probabilidad de que en veinte minutos lleguen
+menos de 5 clientes. 
+
+c) Cual es el número medio de llegadas en un periodo de dos horas. 
+
+d) Comprobar con R los resultados anteriores y mostrar gráficamente
+las funciones de distribución de probabilidad correspondientes. 
+
+```{r}
+ # a) y d)
+
+#a)la propabilidad que lleguen mas de 10 clientes en 1 hora 
+c=10 # 10 clientes
+C_M=60*5/20 # Como son 5 cada 20 minutos haciendo regla de 3 
+# en 1 hora serian 15 clientes
+C_M
+1-ppois(c,C_M)
+#------------------------------------------
+# d)
+#Para poder visualizarlo lo hacemos asi
+exponer=1-ppois(0:30,10) 
+plot(exponer, xlab= "X: Número clientes ", ylab = "Probabilidad de 
+Núm de clientes del Mediamark", col="blue", type = "h")
+grid()
+```
+
+```{r}
+#b) Probabilidad de menos de 5 clientes en 20 minutos
+c1=4 # Al menos 5 clientes 
+C_M2=5 # Numero de clientes en 20 minutos 
+J=ppois(c1,C_M2)
+J
+#------------------------------------------------
+# d)
+#Para poder visualizarlo seria asi 
+dato=ppois(0:4,C_M2) 
+dato
+plot(dato, xlab= "X: Número clientes", ylab = "Probabilidad de 
+Núm de clientes del Mediamark", col="green", type = "l")
+grid()
+```
+
+```{r}
+#c) El numero medio de llegas en 2 horas si en 1 hora eran 
+# 15 clientes obviamente en 2 horas serian 30 clientes 
+clientesminuto=5
+tiempo=20
+tiempo_hora_Cliente=3
+hora=clientesminuto*tiempo_hora_Cliente
+Segundahora=hora*2
+Segundahora
+#El numero es 40 clientes en 2 horas 
+```
+

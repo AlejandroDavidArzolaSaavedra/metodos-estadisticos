@@ -1,0 +1,165 @@
+Cuestión 1: Una empresa de material eléctrico del polígono industrial de Arinaga fabrica para el mercado europeo bombillas que tienen una duración distribuida de forma aproximadamente normal, con una desviación estándar de 40 horas. Si una muestra de 30 bombillas tiene una duración promedio de 780 horas, se pide:
+
+a) Calcular un intervalo de confianza del 96% para la media de la población de todas las bombillas producidas por esta empresa. 
+
+b) ¿A qué conclusiones se llegan a partir de la información suministrada por muestra? Razonar la respuesta y justificar teóricamente la misma.   
+
+c) ¿Cuál sería el tamaño de la muestra para garantizar en un 99% la duración promedio resultante?  
+
+d) ¿Se podría con estos datos calcular un intervalo de tolerancia del 99%? Razónense las respuestas. 
+
+e) Mostrar gráficamente con R los intervalos para las hipótesis establecidas y visualizar las conclusiones. 
+
+
+
+```{r}
+#a)
+#Intervalon de confianza para la media con varianza conocida
+#tomamos una muestra
+n=30
+media=780
+desviacion_estandar=40
+# Mu( media+-Zalfa/2*desviacion_estandar/sqrt(n))
+z=0.04/2
+z=1-z
+t=desviacion_estandar/sqrt(n)
+t
+o=qnorm(z)
+o
+# El inctervalo de confianza es de 
+IC1=media-t
+IC2=media+t
+# El intervalo es de 772,697 hasta 787.303
+IC1
+IC2
+
+mu<-780
+sigma<-40
+n1<-30
+
+
+It1<-mu-qt(0.98, df=(n-1))*sigma/sqrt(n1) 
+It2<-mu+qt(0.98, df=(n-1))*sigma/sqrt(n1) 
+cat(c("lím.Inf. IC 96%=", as.character(round(It1,3)),"lím.Sup. IC 96% =", as.character(round(It2,3))))
+```
+
+```{r}
+#b)
+# El IC se encuentra en [772.69,783,3] horas
+#Con lo que estimamos que la vida media poblacional de las bombillas que se fabrican estan entre 772.69 y 787,3 con un nivel de confianza del 96 %
+mu
+Error=IC2-mu
+Error
+# Hay un error posible de 7,3 horas con respecto al verdadero valor de la "m" 
+#Para muestras pequeñas que se seleccionan de poblaciones no normales, no podemos esperar que nuestro grado de confianza sea preciso. 
+#Para muestras de tamaño n ≥ 30, en las que la forma de las distribuciones no esté muy sesgada, la teoría de muestreo garantiza buenos resultados
+```
+
+```{r}
+#c)
+
+#Sabemos que el error era de un 7,3
+# Error = Z_alfa/2*desviacion_estandar/sqrt(n)
+# n=?
+# a- alfa=0.99
+alfa=0.01
+ # z alfa/2= z 0.005
+f=qnorm(0.995)
+# Entonces
+# 7.3=2.5758*40/sqrt(n
+
+n=(((f*desviacion_estandar)/t)^2)
+n
+# Con lo cual mas o menos es igual a 200 bombillas para garantizar el 99 % de su duracion promedio
+
+```
+
+```{r}
+# d)
+#No se puede por que los limites de obtencion es para distribucion normal no m y varianza desconocida
+```
+
+```{r}
+#e)
+AB<-seq(700,850,0.001) 
+DPAB<-dt(AB,n-1, mu) 
+plot(AB,DPAB, type = "l", col="brown", xlab="Numero de horas de las bombillas ", ylab="DF") 
+xliminf<-It1
+xlimsup<-It2
+xv<-AB[AB>=xliminf & AB<=xlimsup] 
+yv<-DPAB[AB>=xliminf & AB<=xlimsup] 
+xv<-c(xv,xlimsup,xliminf) 
+yv<-c(yv,0,0) 
+polygon(xv,yv,col = "green", density = 20) 
+grid()
+Ac<-seq(772.697,787.303,0.001)
+t.test(Ac,conf.level = 0.96)
+t.test(Ac-7,conf.level = 0.96)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

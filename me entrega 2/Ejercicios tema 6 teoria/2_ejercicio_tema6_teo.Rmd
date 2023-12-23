@@ -1,0 +1,26 @@
+ Cuestión 2: Las calificaciones de un examen de Métodos Estadísticos durante los últimos cinco años tienen aproximadamente una distribución normal de media μ = 7.45 y una varianza de σ 𝟐𝟐=0.8. ¿Se seguiría considerando que σ 𝟐𝟐=0.8 es un valor válido de la varianza si una muestra aleatoria de 20 estudiantes que se examinan obtiene un valor de 𝒔𝒔𝟐𝟐=20?. Razonar adecuadamente la respuesta y justificar teóricamente la misma. 
+ 
+```{r}
+# Se trata de una distribucion muestral de la varianza 
+media=7.45
+sigma_cuadrado=0.8
+n=20
+desviacion_cuadrado=20
+ # 1 - alfa=0.975
+ # alfa/2= 0.025
+ # alfa/2=0.025
+
+df=19
+p3=0.025
+P4=0.975
+qchisq(p3,df) # x^2-alfa/2 
+qchisq(P4,df) # x^2+alfa/2
+# En el ejercicio 
+x2=df*n/sigma_cuadrado
+x2
+#Como podemos observar nuestro valor no lo podemos considerar valido sigma^2 =0.8
+sigma_cuadrado
+# Si la variabilidad  es considerablemente mayor, entonces habrá un solape considerable en los datos muestrales, una señal de que los datos podrían provenir de una distribución común.Es muy improbable que los datos de una distribución con una media común puedan tener una variabilidad entre promedios muestrales que sea considerablemente mayor que la variabilidad dentro de las muestras
+
+```
+

@@ -1,0 +1,77 @@
+Cuestión 1: Considérese una población normal, con varianza 
+desconocida, que tiene una media de 20.5.  
+
+a) ¿Es posible obtener una muestra aleatoria de tamaño 8
+de esta población con una media de 23.75 y una desviación
+estándar de 4.0?  
+
+b) Si no fuera posible, ¿a qué conclusión llegaría? 
+
+c) Razonar sobre el tamaño de la muestra y su relación sobre
+el posible intervalo de confianza para la media de la misma.
+Documentar y explicar las conclusiones 
+
+```{r}
+#a) Se trata de una media muestra con varianza desconocida
+# t student( mu, deviacionestandar/sqrt(n))
+# Para una muestra n, meia de la poblacion , desviaion estandar
+Media=20.5
+desviacion_estandar=4
+Media_poblacion=23.75
+n1=8 # tamaño de la poblacion
+n=n1-1 # grados de libertad
+t=(Media_poblacion-Media)/(desviacion_estandar/(sqrt(n1)))
+t # Si es posible a un niveld e confianza del 95 %
+# Vamos a llevarlo a un nivel de confianza del 95 % 
+p1=0.025
+p2=0.975
+r=qt(p1,n) # Con esto sabemos que el valor de -tα/2 es -2.36
+r
+q=qt(p2,n)# Con esto sabemos que el valor de tα/2 es 2.36
+q
+1-pt(t,n)
+# Como 0.02757 > 0.025 La muestra si cae en el rango posible 
+```
+```{r}
+#b)
+# Si la probabilidad a la derecha del t student de la muestra
+# fuera inferior a 0.25 caeria fuera del rango posible
+# Las causas podrian ser por:
+
+# 1) La n( tamaño) es muy pequeño por lo tanto no va a
+#ser muy fiable
+# 2) El dato de la Media no es correcto
+
+# Para estar seguros buscar una muestra de mayor tamaño 
+# o dismnuir el nivel de confianza del 95 % al 90 % 
+```
+
+```{r}
+#c)
+ic="-t_alfa/2 ≤ x-mu/S/sqrt(n) ≤ t_alfa/2)= 0.95"
+ic
+ic2= "-t_alfa/2*S/sqrt(n) ≤ x-mu ≤ t_alfa/2*S/sqrt(n)"
+ic2
+ic3="-x-t_alfa/2*S/sqrt(n)≤ -mu ≤ -x + t_alfa/2*S/sqrt(n)"
+ic3
+ic4="+x+t_alfa/2*S/sqrt(n)≤ mu ≤ x - t_alfa/2*S/sqrt(n)"
+ic4
+# El intervalo se encontraria finalmente
+Mu="x-t_alfa/2*S/sqrt(n),x+t_alfa/2*S/sqrt(n)"
+Mu
+
+margen_de_error= "t_alfa/2*S/sqrt(n)"
+# O lo que es lo mismo
+margen_de_error2= "+-t_alfa/2*S/sqrt(n)"
+margen_de_error_ejemplo=r*(desviacion_estandar/sqrt(n1))
+margen_de_error_ejemplo
+margen_de_error_ejemplo2=q*(desviacion_estandar/sqrt(n1))
+margen_de_error_ejemplo2
+# Se trata de nuestro margen de error a menor error mayor 
+# tamaño de la muestra por eso hacemos lo siguiente 
+error=t^2*((desviacion_estandar^2)/n1)
+error
+n_final=t^2*((desviacion_estandar^2)/(error^2))
+n_final # Tamaño de la muestra 
+```
+

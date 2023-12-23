@@ -1,0 +1,218 @@
+Ejercicio 3.  El fichero “germinacion.csv” contiene los datos de germinación de semillas de dos genotipos de la planta parásita Orobanche y dos extractos de plantas huésped (judia y pepino) que se utilizaron para estimular la germinación. La variable “count” representa el número de semillas que germinaron de un lote de tamaño “sample” . Con estos datos se pide:  
+
+a) Crear un data frame con los datos de la variable “count” y una columna adicional que incluya en número de semillas que no germinó. 
+
+b) Calcular los parámetros de centralización y dispersión del conjunto de muestras para cada genotipo y tipo de planta huésped y analizar gráficamente el efecto del genotipo en la germinación. Explicar las conclusiones.
+
+c) Utilizar la función lm() para ver la tendencia e influencia de los genotipos en la germinación. ¿Son estadísticamente independientes las variables de genotipo (“Orobanche”) y de tipo de planta huésped (“extract”)? Razonar y justificar las respuestas. 
+ 
+ 
+
+
+
+```{r}
+# a)
+getwd()
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_2_entrega/DATOS")
+datos_empleo<-read.table("germinacion.csv", header = T, sep = ",")
+datos_empleo
+#hay que hallar la mediana 4 combinacion de 2 fa
+#proportciion esntre saple y tenemos una columna  por centaje de semillas q si germinacion y pro 
+#boxplot(100)
+attach(datos_empleo)
+plot=datos_empleo[,1]
+plot
+count1=data.frame(count)
+count1
+pp=count/sample
+Semillas_no=sample-count
+cbind(datos_empleo,pp,Semillas_no)
+media =mean(count~Orobanche)
+media
+# hacer la media, la mediana y la moda de los datos ,para la centralizacion
+# para la dispersion lo que tenemos que hacer es hallar la desviacion tipica
+# y ya con eso aplicamos el boxplot  de los dos tipos de germinacion 
+```
+
+```{r}
+# b)
+#------------------------------------
+# Truqillo para aplicar la moda 
+Mode = function(x) {
+ux = unique(x)
+ux[which.max(tabulate(match(x, ux)))]
+}
+#-----------------------------------------
+
+#Centralizacion y dispersion para cada  conjunto de muestras de cada genotipo  no incluyendo el tipo de planta que se trata 
+print("Parametros de dispersion y centralizacion para cada genotipo: ")
+new_data=subset(datos_empleo,Orobanche=="a75")
+new_data
+#media
+print("Media a75: ")
+new_data_media=mean(new_data[,2])
+new_data_media
+#--------------
+#mediana 
+print("Mediana a75: ")
+new_data_mediana=median(new_data[,2])
+new_data_mediana
+#------------------------------------
+#Moda
+print("Moda a75: ")
+new_data_moda=Mode(new_data[,2])
+new_data_moda
+#--------------------------------
+# Desviacion tipica
+print("Desviacion tipica  a75: ")
+new_data_desviacion_tipica=sd(new_data[,2])
+new_data_desviacion_tipica
+# ---------------------------------
+# Y ahora hacemos lo mismo pero con el otro genotipo 
+
+new_data2=subset(datos_empleo,Orobanche=="a73")
+new_data2
+#Media 
+print("Media a73: ")
+new_data2_media=mean(new_data2[,2])
+new_data2_media
+#--------------------------------
+#Mediana
+print("Mediana a73: ")
+new_data_media2=median(new_data2[,2])
+new_data_media2
+#-----------------------------------------
+#Moda
+print("Moda a73: ")
+new_data_moda2=Mode(new_data2[,2])
+new_data_moda2
+#--------------------------------------
+# Desviacion tipica
+print("Desviacion tipica  a73: ")
+new_data_desviacion_tipica2=sd(new_data2[,2])
+new_data_desviacion_tipica2
+
+#Ahora vamos a aplicarla a cada tipo de planta huesped del que se trate 
+#Empezamos con el a75 de pepino
+new_data_pepino=subset(new_data,Orobanche=="a75" & extract=="pepino")
+new_data_pepino
+#Seguimos con el a75 de judia
+new_data_judia=subset(new_data,Orobanche=="a75" & extract=="judia")
+new_data_judia
+#Empezamos con el a73 de pepino
+new_data_pepino2=subset(new_data2,Orobanche=="a73" & extract=="pepino")
+new_data_pepino2
+#Seguimos con el a73 de judia
+new_data_judia2=subset(new_data2,Orobanche=="a73" & extract=="judia")
+new_data_judia2
+
+print("Parametros y dispersion para cada tipo de planta ")
+# Empezamos con pepino de a75 
+#Media 
+print("Media a75 pepino : ")
+new_data_pepino_media=mean(new_data_pepino[,2])
+new_data_pepino_media
+#--------------------------------
+#Mediana
+print("Mediana a75 pepino: ")
+new_data_pepino_mediana=median(new_data_pepino[,2])
+new_data_pepino_mediana
+#-----------------------------------------
+#Moda
+print("Moda a75 pepino: ")
+new_data_pepino_moda=Mode(new_data_pepino[,2])
+new_data_pepino_moda
+#--------------------------------------
+# Desviacion tipica
+print("Desviacion tipica  a75 pepino: ")
+new_data_pepino_desviacion_tipica=sd(new_data_pepino[,2])
+new_data_pepino_desviacion_tipica
+
+# Empezamos con judia 
+#Media 
+print("Media a75 judia : ")
+new_data_judia_media=mean(new_data_judia[,2])
+new_data_judia_media
+#--------------------------------
+#Mediana
+print("Mediana a75 judia: ")
+new_data_judia_mediana=median(new_data_judia[,2])
+new_data_judia_mediana
+#-----------------------------------------
+#Moda
+print("Moda a75 judia: ")
+new_data_judia_moda=Mode(new_data_judia[,2])
+new_data_judia_moda
+#--------------------------------------
+# Desviacion tipica
+print("Desviacion tipica  a75 judia: ")
+new_data_judia_desviacion_tipica=sd(new_data_judia[,2])
+new_data_judia_desviacion_tipica
+
+# Empezamos con pepino de a73
+#Media 
+print("Media a73 pepino : ")
+new_data_pepino_media2=mean(new_data_pepino2[,2])
+new_data_pepino_media2
+#--------------------------------
+#Mediana
+print("Mediana a73 pepino: ")
+new_data_pepino_mediana2=median(new_data_pepino2[,2])
+new_data_pepino_mediana2
+#-----------------------------------------
+#Moda
+print("Moda a73 pepino: ")
+new_data_pepino_moda2=Mode(new_data_pepino2[,2])
+new_data_pepino_moda2
+#--------------------------------------
+# Desviacion tipica
+print("Desviacion tipica  a73 pepino: ")
+new_data_pepino_desviacion_tipica2=sd(new_data_pepino2[,2])
+new_data_pepino_desviacion_tipica2
+
+# Empezamos con judia 
+#Media 
+print("Media a73 judia : ")
+new_data_judia_media2=mean(new_data_judia2[,2])
+new_data_judia_media2
+#--------------------------------
+#Mediana
+print("Mediana a73 judia: ")
+new_data_judia_mediana2=median(new_data_judia2[,2])
+new_data_judia_mediana2
+#-----------------------------------------
+#Moda
+print("Moda a73 judia: ")
+new_data_judia_moda2=Mode(new_data_judia2[,2])
+new_data_judia_moda2
+#--------------------------------------
+# Desviacion tipica
+print("Desviacion tipica  a73 judia: ")
+new_data_judia_desviacion_tipica2=sd(new_data_judia2[,2])
+new_data_judia_desviacion_tipica2
+```
+
+```{r}
+#c)
+# Vamos a realizar un boxplot sobre cada planta y sobre si ha germinado o no
+boxplot(Semillas_no[extract=="judia"]~Orobanche[extract=="judia"],col=c("red","green"),xlab="Genotipo en las judias")
+lm1=lm(Semillas_no[extract=="judia"]~Orobanche[extract=="judia"])
+abline(lm1)
+
+boxplot(Semillas_no[extract=="pepino"]~Orobanche[extract=="pepino"],col=c("red","green"),xlab="Genotipo en los pepino")
+lm2=lm(Semillas_no[extract=="pepino"]~Orobanche[extract=="pepino"])
+abline(lm2)
+
+boxplot(count[extract=="judia"]~Orobanche[extract=="judia"],col=c("red","green"),xlab="Genotipo en las judias")
+lm3=lm(count[extract=="judia"]~Orobanche[extract=="judia"])
+abline(lm3)
+
+boxplot(count[extract=="pepino"]~Orobanche[extract=="pepino"],col=c("red","green"),xlab="Genotipo en los pepino")
+lm4=lm(count[extract=="pepino"]~Orobanche[extract=="pepino"])
+abline(lm4)
+#---------------------------------------------------
+# Como se puede observar se han germinado mas semillas de orobanche en el genetipo a75 con lo cual nos quiere decir que la hay que tener mas cuidado con el genotipo a75 por que es mas propenso a que le aparezcan los orobanches mas que con el genotipo a73
+# Y si son independientes una de otra por que no tiene que haber ocurrido una para que la otra tenga mas o menos, es decir una no afecta  a otra aunque una sea mas afectada por este genotipo que por otro y que halla mas cantidad de una planta u otra no significa que valla a aumentar la cantidad de plantas afectadas por este genotipo
+#--------------------------------------------------
+```
+
