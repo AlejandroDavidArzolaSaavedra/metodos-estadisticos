@@ -1,4 +1,4 @@
-# Métodos Estadísticos - Repositorio de Ejercicios y Proyecto 📊
+# Métodos Estadísticos - Repositorio de Ejercicios y Proyecto ULPGC 📊
 
 ## Descripción
 
