@@ -1,0 +1,54 @@
+Cuestión 3: Se desea conocer la media y la dispersión de las rentas mensuales de los habitantes del barrio de Vegueta en la ciudad de Las Palmas de Gran Canaria con un nivel de significación del 5%. Para ello se realizó una muestra aleatoria simple en la que se observaron las rentas mensuales en euros de los vecinos que se detallan en la siguiente tabla:
+Rentas Mensuales (en €)
+a) Encontrar el correspondiente intervalo de confianza de dos colas para la media de rentas. Razonar la respuesta.
+b) ¿Supera, con el nivel de significancia referido, los 1000 euros la desviación típica de las rentas mensuales de los habitantes del barrio? Justificar adecuadamente la respuesta y fundamentarla desde un punto de vista teórico.
+
+```{r}
+# Intervalo de confianza para la media con varianza desconocida 
+Ph<-c(1500.21,1210.12,2060.01,1500.08,890.50,1800.30,2015.22,3200.00,1005.40,880.66,2010.1,810.10,2500.00,515.01,625.12,720.25,1601.79,2150.1,605.22,701.30,1012.34,917.45,820.39,1002.20,1102.45,1219.70,623.56)
+mu<-mean(Ph) 
+mu 
+sigma<-sd(Ph)
+sigma 
+n<-length(Ph)
+n  
+Ic1<-mu-qt(0.975, df=(n-1))*sigma/sqrt(n) 
+Ic2<-mu+qt(0.975, df=(n-1))*sigma/sqrt(n) 
+cat(c("lím.Inf. IC 95%=", as.character(round(Ic1,3)), "  lím.Sup. IC 95% =", as.character(round(Ic2,3))))
+#Una posible conclusión es quelas rentas mensuales de los habitantes del barrio de Vegueta es superior a 1030, pues 1030 no está en el intervalo de confianza
+AB<-seq(1000,2000,0.001) 
+DPAB<-dt(AB,n-1, mu) 
+plot(AB,DPAB, type = "l", col="brown", xlab="Media", ylab="DF") 
+xliminf<-Ic1 
+xlimsup<-Ic2 
+xv<-AB[AB>=xliminf & AB<=xlimsup] 
+yv<-DPAB[AB>=xliminf & AB<=xlimsup] 
+xv<-c(xv,xlimsup,xliminf) 
+yv<-c(yv,0,0) 
+polygon(xv,yv,col = "green", density = 20) 
+grid()
+t.test(Ph,conf.level = 0.95)
+#b)
+alfa=0.05
+Ho=1000
+# Ho: desviacion ≤ 1000
+# H1: desviacion >1000
+# var1=1.000.000
+# var2=1.000.000
+t=(1000-mu)/(1000000/sqrt(27))
+t
+n1=n-1
+qchisq(0.95,n1)
+s=sigma*sigma
+var=Ho*Ho
+chicuadrado=((n1)*s)/1000
+chicuadrado
+#Región crítica RC (hipótesis alternativa) X^2>X^alfa2
+
+#Rechazamos la hipótesis nula H0 cuando χ^2>𝟐38.8851498
+pchisq(11,n1)
+
+# Hay evidencia para 1000 euros, no rechazamos la hipótesis nula H0 por el bajo valor del estadistico X^2
+#Una dispersion alta sería un indicativo de un reparto desigual de la renta en este barrio.
+```
+

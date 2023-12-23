@@ -1,0 +1,81 @@
+Cuestión 2: En un ayuntamiento de la Isla de Gran Canaria se sospecha que se está produciendo una discriminación salarial de sus empleadas dentro de una determinada categoría y antigüedad laboral. Para analizar el hecho se ha decidido tomar muestras simples e independientes una de 16 empleados públicos varones y otra de 10 empleadas, y se les preguntó sobre su salario percibido en euros. Los datos se recogen en la siguiente tabla:
+
+a) Establecer un intervalo de confianza al 95% para la diferencia de los salarios entre empleados y empleadas públicas en este ayuntamiento
+
+b) ¿Cuáles serían las diferencias de los límites si se establece al 90%? Razonar la respuesta.
+
+c) A partir del resultado de a) razonar sobre la existencia de discriminación salarial entre hombres y mujeres en el ayuntamiento de referencia
+
+d) ¿A qué conclusiones se llegaría si los tamaños de las muestras fueran de 45 para los empleados y de 30 para las empleadas? ¿sería diferentes? Razonar la respuesta
+
+```{r}
+# Intervalo de confianza al 95 % para la M1-M2 con V1^2,V2^2 desconcidas
+
+# a) Contraste para la igualdad de varianzas
+#Ho: V1^2=v2^2
+#H1: V1^2/=V2^2
+n1=16
+n2=10
+v1=n1-1
+v1
+v2=n2-1
+v2
+# Se trata de una fisher 
+qf(0.975,v1,v2)
+qf(0.025,v1,v2)
+# Estadistico
+Varianza1=61500
+Varianza2=90201
+f=Varianza2/Varianza1
+f
+# Haceptamos Ho =) podemos considerar varianza1=varianza2
+# Por tanto:
+# Para I.C para m1-m2 con varianzaas desconocidas pero iguales
+# Sp^2=(n1-1)*S1^2+(n2-1)*S2^2/n1+n2-2
+# mu1-mu2(= I[(x1-x2)+-tα/2*Sp*sqrt(1-n1+1/n2)]
+v=n1+n2-2 # Grados de libertad
+α=0.05
+α_medios=α/2
+y=qt(α_medios,v)
+y
+#c)
+#Región critica RC: t>-2.063899
+sp=((Varianza1*(n1-1))+(Varianza2*(n2-2)))/n1+n2-2
+sp2=sqrt(sp)
+sp2
+media1=1515.60
+media2=1298.35
+t=((media1-media2)-v)/(sp2*sqrt(1/n1+1/n2))
+t
+# Decisión: no rechazar H0 no podemos concluir la existencia de discriminación salarial entre hombres y mujeres en el ayuntamiento
+#b)
+# tv,0.05 < tv,0.025
+# por tanto va a disminuir la amplitud del invervalo=) mas riesgo de error en la estimacion 
+#d)
+# Evidentemente si aumenta las n1 y n2 sera mas fiable la estimacion, y seguirian siendo iguales no podemos concluir la existencia de discriminación salarial entre hombres y mujeres en el ayuntamiento
+# Por otro lado
+#           (  Error ) (   Error  )
+#---------/----------/------------/-----------
+#        x min      x1-x2        x max  
+
+# (x1-x2)+-Error
+# al aumentar n1 y n2 (Error disminuye)
+print("Error original")
+E1=y*sp2*sqrt(1/n1+1/n2)
+E1
+
+nn1=45
+nn2=30
+sp=((Varianza1*(nn1-1))+(Varianza2*(nn2-2)))/nn1+nn2-2
+sp3=sqrt(sp)
+sp3
+media1=1515.60
+media2=1298.35
+t=((media1-media2)-v)/(sp3*sqrt(1/n1+1/n2))
+t
+# E= Tv,α/2*Sp*sqrt(1/n1+1/n2)
+print("Error aumentando la n1 y n2")
+E2=y*sp3*sqrt(1/nn1+1/nn2)
+E2
+```
+

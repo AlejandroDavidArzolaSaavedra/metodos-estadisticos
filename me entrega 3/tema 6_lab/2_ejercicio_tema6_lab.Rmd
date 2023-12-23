@@ -1,0 +1,53 @@
+Ejercicio 2: Se realiza un muestreo de plantas que han sido tratadas con tres tipos de fertilizantes diferentes y se analiza si han florecido, obteniéndose los resultados que refleja la siguiente tabla:
+
+Contrastar si existe o no relación entre el tipo de fertilizante empleado y la presencia o ausencia de floración. Utilizar para el contraste un nivel de significación del 5%. Razonar la respuesta.
+
+
+
+```{r}
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_3_entrega/DATOS")
+res=read.table("ejercicio2_tema6_laba.csv",header=T,sep=";", row.names = 1,col.names = c(1,2,3))
+res
+#Ho:  existe realcion entre el tipo de fertilizante empleado
+# H1: Rechazamos Ho
+attach(res)
+test<-chisq.test(res,correct=F)
+test
+test$observed
+test$expected
+
+CHI2<-210*(sum(res)-1)
+CHI2
+# Región Crítica
+gl<-(nrow(res)-1)*(ncol(res)-1)
+qchisq(0.95,gl)
+library(knitr)
+
+res2<-matrix(c(34,16,73,12,63,12),ncol=3,nrow=2,byrow=F)
+colnames(res2)<-c("Fertilizante A","Fertilizante B","Fertilizante C")
+rownames(res2)<-c("Han Florecido","No Han Florecido")
+res2<-as.table(res2)
+
+kable(res2)
+res_ampliada<-addmargins(res2)
+kable(res_ampliada)
+
+ni<-res_ampliada[3,]
+nj<-res_ampliada[,4]
+N<-as.numeric(res_ampliada[3,4])
+pres<-res^2
+suma<-0
+for(i in 1:3){
+for(j in 1:2){
+suma<-suma+as.numeric(pres[j,i]/(ni[i]*nj[j]))
+}
+}
+CHI2<-N*(suma-1)
+CHI2
+gl<-(nrow(res)-1)*(ncol(res)-1);gl
+qchisq(0.95,gl)
+
+#Como el valor  2 es menor que el valor límite 5.991465 el estadístico  no está dentro de la RC y no  se rechaza la hipótesis de independencia
+
+```
+

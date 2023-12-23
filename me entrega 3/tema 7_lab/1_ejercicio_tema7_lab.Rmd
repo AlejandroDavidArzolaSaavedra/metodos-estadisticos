@@ -1,0 +1,155 @@
+Ejercicio
+
+El fichero “Aloe_Vera.txt” contiene datos de cuatro variedades de plantas de Aloe obtenidas de una plantación experimental. Con estos datos:
+
+a) Estudiar las variedades que dan más rendimiento desde el punto de vista de su masa y masa seca.
+b) Analizar las dependencias entre la masa y la altura de la variedad “barbadensis”.
+c) Estimar el modelo de regresión con la función lm.
+d) Analizar el modelo estimado con la función "summary" y obtener un posible intervalo de confianza para las conclusiones de los distintos parámetros. 
+e) Evaluar una predicción para una masa de x0=15.5 gramos y encontrar un intervalo de confianza para la misma.
+f) Encontrar el coeficiente de determinación R2.
+g) Realizar un análisis de varianza para estudiar la bondad del ajuste y la linealidad de la regresión. Explicar los resultados obtenidos.
+h)Analizar si sería posible aplicar el estudio anterior y la suposición de homocedasticidad (varianza constante a lo largo de las observaciones) al caso de analizar las relaciones entre la masa y la masa seca para la variedad “saponaria”. Utilizar el test de White (variedad del test de Breusch-Pagan bptest, del paquete lmtest). Explicar las conclusiones
+
+```{r}
+#Leemos el documento
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_3_entrega/DATOS")
+Aloe<-read.table("Aloe_Vera.txt", sep=",", dec=".", header = T)
+Aloe
+```
+
+
+```{r}
+#a)
+
+# Representamos a traves de los boxplots las distintas masas,hojas,altura en funcion del tipo de aloe  y luego aremos una media en funcion de su masa paara por estudiar su rendimiento 
+boxplot(Aloe$Masa~Aloe$Variedad, col="blue", xlab="Variedades Aloe", ylab="Masa (grms)")
+grid()
+#Desde el punto de vista de la masa la mejor variedad de aloe es la arborescens
+
+boxplot(Aloe$Masa_Seca~Aloe$Variedad, col="pink", xlab="Variedades Aloe", ylab="Masa Seca (grms)")
+grid()
+#Y en cuanto a su masa y su altura la mejor sigue siendo la arborescens y podemos ver varios outliers en la barbadensis 
+boxplot(Aloe$Altura~Aloe$Variedad, col="yellow",xlab="Variedades Aloe", ylab="Altura (cms)")
+grid()
+# En cuanto a la numero de hojas las mejores son la arborescens y la barbadensis
+boxplot(Aloe$Num_Hojas~Aloe$Variedad,col="purple", xlab="Variedades Aloe", ylab="Num. Hojas (uds)",border="blue")
+grid()
+
+#En general la mejor variedad de aloe es la arborescens
+aggregate(Aloe$Masa~Aloe$Variedad, Aloe, mean)
+#Podemos ver que el aloe arborescens es el que mas masa produce por lo tanto es el que mas rendimiento produce. y la que menos produce es la brevifolia
+```
+
+```{r}
+#b)
+
+# Con el comando subset seleccionamos la variedad barbadensis 
+Barbadensis<-subset(Aloe,subset = (Aloe$Variedad=="barbadensis"))
+#Ploteamos los datos de la altura en funcion de la masa de la variedad barbadensis 
+plot(Altura~Masa, data=Barbadensis, pch=25, col="green", xlab = "Masa en (grs.)", ylab="Altura (cms.)",main="Aloe Vera Barbadensis")
+grid()
+```
+
+
+```{r}
+#c)
+#•Seleccionamos la barbadenis del fichero
+Barbadensis<-subset(Aloe,subset = (Aloe$Variedad=="barbadensis"))
+#Ploteamos la altura en funcion de la masa del aloe barbadensis 
+plot(Altura~Masa, data=Barbadensis, pch=19, col="blue", xlab = "Masa en (grs.)", ylab="Altura (cms.)", main="Aloe Vera Barbadensis"); grid()
+# modelo de regresion lineal simple de la barbadensis
+modelo1<-lm(Altura~Masa, data=Barbadensis)
+# representacion de la linea de regresion lineal 
+abline(modelo1, col="green", lwd=2)
+```
+
+
+```{r}
+#d)
+attach(Barbadensis)
+# Hacemos un data frame de la masa del barbadensis
+
+gridx <- data.frame(Masa)
+gridx
+attach(gridx)
+#Hacemos una prediccion del modelo segun su masa 
+CIline <- predict(modelo1,new=gridx,interval="conf",level=0.95)
+CIpred <- predict(modelo1,new=gridx,interval="pred",level=0.95)
+#Volvemos a plotear la barbadensis 
+plot(Altura~Masa,pch=15,cex=.5, col="green", xlab = "Altura (cms)", ylab = "Masa (grs)", main="Intervalos de confianza")
+#Ponemos encima la linea del modelo de regresion lineal 
+abline(modelo1, col="black")
+#Y las lineas del intervalo de confianza  y para la prediccion 
+matlines(gridx,cbind(CIline,CIpred[,-1]), lty=c(1,2,2,3,3),col="red")
+legend("topleft",lty=2:3,c("pred","conf"))
+grid()
+summary(CIline)
+summary(CIpred)
+```
+
+
+```{r}
+#e)
+#Volvemos ha ahcer lo mismo seleccionamos la barbadensis y plotemos la masa en funcion de la altura de la barbadensis 
+Barbadensis<-subset(Aloe,subset = (Aloe$Variedad=="barbadensis"))
+plot(Altura~Masa, data=Barbadensis, pch=19, col="blue", xlab = "Masa en (grs.)", ylab="Altura (cms.)",main="Aloe Vera Barbadensis"); grid()
+# Volvemos ha hacer el modelo de regresion lineal simple que hizimos anteriormente para poder visualizarlo luego para una masa de x0=15.5
+modelo1<-lm(Altura~Masa, data=Barbadensis)
+abline(modelo1, col="green", lwd=2)
+#Prediccion para la masa de x0=15.5 gramos 
+x0<-15.5
+prediccion_masa<-predict(modelo1,list(Masa=x0))
+points(x0,prediccion_masa, pch=16, col="black")
+lines(c(x0,x0),c(0,prediccion_masa), col="red",lty=3, lwd=3)
+
+#Intervalo confianza predicción
+inter_prediccion2<-predict(modelo1, level = 0.95, newdata = data.frame(Masa=x0), interval = "prediction" )
+#Lineas de la prediccion del intervalo en funcion  que la masa sea x0=15.5 gramos 
+lines(c(x0,x0), c(inter_prediccion2[2], inter_prediccion2[3]), col="green")
+#puntos de la prediccion del intervalo en funcion  que la masa sea x0=15.5 gramos 
+points(c(x0,x0), c(inter_prediccion2[2], inter_prediccion2[3]), col="green")
+```
+
+```{r}
+# f)
+
+#El coeficiente de determinaciónR2es una medida de la proporción de la variabilidad explicada por el modelo ajustado.
+#r2= caso de ajuste casi perfecto la SCEse aproximaría a 0 . 
+
+SCE<-sum(residuals(modelo1)^2)
+SCE
+STCC<-sum((Altura-mean(Altura))^2)
+1-(SCE/STCC)
+summary(modelo1)
+
+k=2 # (número de regresoresindependientes)
+n=length(Altura)
+adjusR2<-1-(SCE*(n-1)/(STCC*(n-k))); adjusR2
+
+```
+
+```{r}
+#g)
+
+# H0: β1= 0
+# H1: β1≠ 0
+Barbadensis
+modelo1
+qf(0.95,1,110-2)
+anova_XY<-aov(modelo1)
+anova_XY
+summary(anova_XY)
+# #la variación en los resultados Y debida a las fluctuaciones de probabilidad o aleatorias son dependientes de los valores de x
+```
+```{r}
+# h)
+#ho= hay HOMOCEDASTICIDAD
+#h1= hay HETEROCEDASTICIDAD
+library(lmtest)
+prueba_white<- bptest(modelo1, ~I(Altura^2)+I(Masa^2)+Altura*Masa,data =Barbadensis)
+print(prueba_white)
+# Como   el p value es 8.127e-11 < 0.05 Se rechaza la Ho, por lo tanto hay evidencia de que la varianza de  que  en los residuos hay HETEROCEDASTICIDAD
+```
+
+

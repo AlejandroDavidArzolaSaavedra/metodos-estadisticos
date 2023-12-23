@@ -1,0 +1,38 @@
+Ejercicio 3. Tras una entrevista con los empresarios del sector estos afirman que el salario medio está establecido en 18510€ netos anuales. Para verificarlo se hizo el muestreo que refleja el fichero “sueldos_hosteleria.txt”, que contiene una muestra obtenida en el sur de la isla en empresas del sector de la hostelería sobre el salario anual neto que percibían los trabajadores de categorías y antigüedad análogas. Con esta información, ¿tiene razón los empresarios? (Utilizar un nivel de significación del 5 %).
+
+```{r}
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_3_entrega/DATOS")
+Datos<-read.table("sueldos_hosteleria.txt", header=TRUE, dec=".",sep=",")
+Datos
+suel2<-Datos$Sueldos
+suel2
+hist(suel2,freq=TRUE,main="",labels=TRUE, xlab="sueldos")
+
+#Nos piden que confirmemos la afirmación: el salario medio establecido sea 18510 euros. Hay que a plasmar dicha afirmación en la hipótesis alternativa, que es la única a la que podemos asignar la carga del nivel de confianza.
+#Si μ es el salario medio  de los trabajadores
+
+#H0: μ= 18510
+#H1: μ≠ 18510
+
+#Como n<30 se deben testear la normalidad de las poblaciones para poder aplicar #los diferentes test que la necesitan
+t.test(suel2,alternative="two.sided",mu=18510)
+# Dado que el p-valorno es inferior al 5%, no tenemos suficientes evidencias en los datos para rechazar la hipótesis nula (μ= 18510) en favor de la alternativa (μ≠ 18510),
+
+α= 0.05
+αa=α/2
+t=(18774.763-18510)/(1039.506/sqrt(25))
+t
+
+ajuste.normal<-fitdistr(suel2,"normal")
+mu<-ajuste.normal$estimate[1]
+sigma<-ajuste.normal$estimate[2]
+c(mu,sigma)
+
+# Región critica RC: t<-1.710882
+#  No  Rechazamos H0 un nivel de significancia α=5% cuando el estadístico t calculado excede a tα/2,n -1 o es menor que –tα/2,n -1
+#Es decir, que el valor hipotético que hemos considerado para la media, 18510, está dentro de este intervalo, luego éste es un valor de confianza para μ.
+
+#Si los datos fueran tales que el intervalo de confianza para μdejara fuera al valor 18510, tendríamos razones para pensar que el valor de μes significativamente distinto de 18510
+
+```
+

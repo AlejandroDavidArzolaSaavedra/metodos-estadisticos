@@ -1,0 +1,58 @@
+Ejercicio 2. El fichero “sueldos_hosteleria.txt” contiene una muestra obtenida en el sur de la isla en empresas del sector de la hostelería sobre el salario anual neto que percibían los trabajadores de categorías y antigüedad análogas.
+
+a) Si se supone que el salario neto anual de estos trabajadores sigue una distribución normal, obtener un intervalo de confianza al 90% para el salario medio neto anual correspondiente.
+
+b) Encontrar el intervalo de confianza para la varianza y la desviación estándar en las condiciones del apartado anterior.
+
+c) Visualizar los datos asumiendo que han podido obtenerse de una distribución normal de media 18510€ y desviación estándar de 850€. Explicar las conclusiones.
+
+```{r}
+#a)
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_3_entrega/DATOS")
+suel2= read.table("sueldos_hosteleria.txt", dec=".", sep = ",", header = T)
+suel2
+attach(suel2)
+x=mean(Sueldos)# devuelve la media muestralde datos.
+x
+y<-sd(Sueldos) # devuelve la desviación típica muestral de datos.
+y
+w=sum(sqrt(Sueldos))# devuelve  la suma de las √x
+w
+z<-length(Sueldos)
+z
+t.test(suel2, mu=18510, conf.level = 0.95)
+alfa=0.1
+
+ci2= x-qt(1-alfa/2, df=z-1)*y/sqrt(z)
+cs2= x+qt(1-alfa/2,df=z-1)*y/sqrt(z)
+cm <- c(ci2,cs2)
+cm
+#Nos aseguramos con un 90 % que el intervalo de confianza se encuentra entre 18411.73 19137.79
+```
+
+```{r}
+#b) # Aplicamos la formula del intervalo de confianza para la varianza 
+# hallamos los salarios  con α= 0.05, los límites inferior y superior (ci,cs) son:
+cvi = (z-1)*y^2/qchisq(1-alfa/2,(z-1))
+cvs=(z-1)*y^2/qchisq(alfa/2,(z-1))
+cv=c(cvi,cvs)
+cv
+sqrt(cv)
+# Como conclusion verificamos con con un  90 % que el intervlao se encuentra entre 861,304 y 1396.79
+```
+
+```{r}
+#c)
+su<-15500:22000
+plot(su, dnorm(su, 18510.0,850 ), col="black", type = "l", lty=3,lwd=0.5, xlab = "salarios anuales", ylab = "densidad",col.axis = "blue")
+grid()
+points(Sueldos, dnorm(Sueldos,18510,0.850), col  = rainbow(25), pch=19)
+points(Sueldos, dnorm(Sueldos,18510,0.850), col  = rainbow(25), type = "h", lwd=0.75, lty=3)
+# linea que representa la media de los sueldos 
+abline(v=x, col="green", lwd=2)
+# Intervalo de confianza menor linea que lo representa
+abline(v=ci2, col="red", lty=3, lwd=2)
+# Intervalo de confianza mayor linea que lo representa
+abline(v=cs2, col="red", lty=3, lwd=2)
+# Como conlcusion tenemos que la mayoria se encuentra entre nuestro intervalo de confianza y los que lo superan o son menores sufren una mayor dispersion y son menos cantidad tambien se observa que se encuentra un poco ladeado de nuestra media 
+```

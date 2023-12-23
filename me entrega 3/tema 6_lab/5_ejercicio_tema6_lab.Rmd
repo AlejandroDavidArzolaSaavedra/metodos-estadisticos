@@ -1,0 +1,23 @@
+5.Se llevaron a cabo las pruebas con tres tratamientos (A, B y C) para una enfermedad infecciosa leve sobre tres grupos de pacientes. Además, se incluyó un grupo adicional, al cual se le suministró una medicación placebo (P). Estos tratamientos se valoran en función del tiempo de recuperación en días. Los resultados se indican en la tabla. Se pide estudiar si existen diferencias significativas entre los diferentes tratamientos utilizando el test de Kruskal-Wallis.
+
+```{r}
+datos <- data.frame( condicion = c(rep("P", 8), rep("A", 10), rep("B", 10), rep("C", 9)), dias = c(15,12,10,8,11,9,6,10,7,8,9,8,7,10,9,8,7,10,8,9,8,6,7,8,9,8,7,6,10,12,10,8,9,11,10,9,8))
+#Ho= Son iguales
+#H1=Rechazamos Ho
+aggregate(dias ~ condicion, data = datos, FUN = median)
+aggregate(dias ~ condicion, data = datos, FUN = sd)
+require(ggplot2)
+ggplot(data = datos, mapping = aes(x = dias, colour = condicion)) +
+    geom_histogram() +
+    theme_bw() +
+    facet_grid(. ~ condicion) +
+    theme(legend.position = "none")
+
+ kruskal.test(dias ~ condicion, data = datos)
+ 
+ # El test encuentra significancia en la diferencia de al menos tres grupos
+ # debido a que p value es menor que 5 entonces rechazamos Ho
+pairwise.wilcox.test(x = datos$dias, g = datos$condicion, p.adjust.method = "holm" )
+ 
+```
+

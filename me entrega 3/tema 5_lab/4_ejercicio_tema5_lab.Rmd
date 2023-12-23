@@ -1,0 +1,64 @@
+Ejercicio 4. Se quiere estudiar el efecto de la poda en el rendimiento del crecimiento en un tipo de plantas. Para ello se mide la biomasa resultante de varios experimentos de poda, los datos están en el fichero “plantas_poda.txt”. Se disponen datos de un grupo de plantas de control, donde no se hace ninguna poda (denominado control) y de datos de plantas relativos a dos tipos de poda, un primer tipo denominado poda ligera y rápida (con dos formas de hacerla: n25 y n50) y otro tipo denominado poda de raíz (r10 y r5).
+
+A un nivel de confianza del 95%:
+
+a) Analizar si puede considerarse que los cuatro métodos de poda producen resultados equivalentes.
+
+b) ¿Hay algún método superior a los demás? Razonar las respuestas
+
+```{r}
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_3_entrega/DATOS")
+h=read.table("plantas_poda.txt", dec=".", sep = ",", header = T)
+h
+attach(h)
+
+#----------------------------------------------------------------------------------
+#Vamos a visualizar los datos 
+control<-Biomasa[Tipo_Poda=="control"]
+n25<-Biomasa[Tipo_Poda=="n25"]
+n50<-Biomasa[Tipo_Poda=="n50"]
+r10<-Biomasa[Tipo_Poda=="r10"]
+r5<-Biomasa[Tipo_Poda=="r5"]
+
+n<-length(control)
+yij<-c(n25,n50,r10,r5,control)
+Y_m_T<-mean(yij)
+STC<-sum((yij-Y_m_T)^2);STC
+
+SCT<-n*((mean(control)-Y_m_T)^2+(mean(n25)-Y_m_T)^2+ (mean(n50)-Y_m_T)^2+(mean(r10)-Y_m_T)^2+(mean(r5)-Y_m_T)^2);SCT
+
+SCE<-STC-SCT;SCE
+
+s12<-SCT/4;s12
+
+s2<-SCE/(25);s2
+
+FA<-s12/s2;FA
+#a) 
+#HO= las medias son iguales
+#H1= 2 o mas medias no son iguales
+# Como F> 2.975154 Se rechaza H0
+datos<-data.frame(variable=c(n25,control,n50,r10,r5))
+grupo=factor(c(rep(1,n),rep(2,n),rep(3,n),rep(4,n),rep(5,n)))
+attach(datos)
+ANOVA<-aov(variable~grupo,data= datos)
+summary(ANOVA)
+qf(0.95,3,26)
+# Por lo tanto no podemos  considerar que los 4 metodos producen resultados equivalentes
+#b)
+# 
+xdatos<-data.frame(control,n25,n50,r10,r5)
+boxplot(xdatos,
+col = c("red","green","purple","yellow","blue"),
+ylab="Biomasa",
+xlab="Tipo_Poda",
+staplewex=1,
+border= "brown")
+grid()
+# El metodo superior de poda es el r5 por que es el que mas biomasa de media acaba produciendo al final sera la que mas rendimiento de crecimiento tendra.
+```
+
+
+
+
+

@@ -1,0 +1,18 @@
+Ejercicio 1. Se desea contrastar si la distribución que muestra las solicitudes de crédito recibidas en una sucursal bancaria en 308 días sigue o no una distribución de Poisson. Utilizar para el contraste un nivel de significación del 5%.
+```{r}
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_3_entrega/DATOS")
+library("readxl")
+ejercicio1=read.table("ejercicio1_tema6_lab.csv",header=T,sep=";")
+names(ejercicio1)
+ejercicio1
+#Ho: Sigue una distribucion Poisson
+#H1: Rechazamos Ho
+library(vcd)
+attach(ejercicio1)
+ajuste<-goodfit(ejercicio1, type="poisson", method="MinChisq")
+ajuste
+summary(ajuste)
+#Podemos rechazar Ho el valor de p es bajo practicamente no se puede aplicar por que se trata de valores pequeños.
+chisq.test(ejercicio1, simulate.p.value = TRUE)
+```
+

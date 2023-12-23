@@ -1,0 +1,89 @@
+Cuestión 1: Se determinó la mortalidad, en grupos de diez, de ratones que mueren con dosis de un determinado tipo de droga según se refleja en la siguiente tabla:
+Dosificación
+Número de Muertes
+a) Realizar un análisis de regresión simple entre ambas variables.
+
+b) Calcular la suma de cuadrados del error y realizar una prueba para la falta de ajuste. Evaluar y analizar gráficamente las relaciones y los errores residuales correspondientes.
+
+c) Encontrar los intervalos de confianza para los coeficientes de regresión.
+
+d) ¿Es posible realizar predicciones con este modelo lineal?, en caso afirmativo estimar la dosis letal mínima (DLM), esto es, la dosis que matará a la mitad de los ratones.
+Explicar las respuestas. Utilizar R en los cálculos donde sea necesario.
+
+
+```{r}
+#Al ser tan pequeño puede haber un probable problema en la medida de bondad de ajuste 
+dosificacion=c(50,56,62,70,80)
+Numerodemuertes=c(0,4,5,6,9)
+#para n pequeños se hace un pequeño ajuste
+# Vamos a encontrar la mejor relación entre x e y
+y=dosificacion
+x=Numerodemuertes
+# Es una regresion simple pues se trata de  un solo regresor 
+# Y= B0+b1X
+#Plotemamos la dosificaicion y las variables
+plot(x,y,ylim=c(0,100),pch=19,col="purple",xlab="Numero de muertes de los ratones", ylab="Dosificacion",cex=1.5)
+grid()
+#Realizamos el modelo de regresion simple
+modelo=lm(y~x)# Los valores de yse distribuyen alrededor de la recta verdadera o recta de regresión de la población y=β0+ β1x
+
+#La verdadera recta de regresión pasa a través de las medias de la respuesta y las observaciones reales se encuentran sobre la distribución, alrededor de las medias.
+
+#-----------------------------------------------------------------------------
+#Diferencia entre la estima y el valor que vamos obteniendo
+coefficients(modelo)
+#S=3.9
+summary(modelo)
+#El summary nos indica la estima de los coeficientes
+# Nuestra
+b0b1=coefficients(modelo)
+#Asimetria
+confint(modelo)
+abline(modelo,col="red")
+ # el B0= esta entre  36.317177 57.77628
+ # el B1= esta entre  1.539896  5.35730
+e=residuals(modelo)
+# Todos los posibles errores siguen una normal
+
+plot(e,type="h",lwd=2,col="red")
+abline(h=0)
+grid()
+#Normalidad aceptable si salemas de 0.05
+shapiro.test(e)
+# p value suma de cuadrados totales menos la suma de los cuadrados del error
+ks.test(e,"pnorm")
+
+library(tseries)
+#Mide la simetria 
+jarque.bera.test(e)
+
+#Podemos  ver que no es horizontal
+#Lo representamos un histograma de los residuos
+hist(e,freq =F,col="green",density=25,border="brown")
+valores=seq(min(e),max(e),0.1)
+points(valores,dnorm(valores,mean=mean(e),sd=sd(e)),type="l",col="blue")
+confint(modelo)
+#Aunque si que aparecen una seria de asimetrias
+coefficients(modelo)
+#-----------------------------------------------------------------------------------------
+# Si es posible hacer predicciones 
+# Sigue una normal  y hay una suma de unas variables
+#Se trata ahora obtener un intervalo de predicción para cualquier valor único y0 de la variable y0.
+#x=5 es la mejor estima
+ # En el intervalo de confianza nos quedamos con la muestra de abajo por que matamos a las 5 ratas es la dosis letal minima.
+prediccion=predict(modelo,newdata=data.frame(x=5),inverval="pred")
+# Predicción de intervalo de confianza para la media de múltiples observaciones o respuesta media
+#Lo ploteamos
+# 64 es la prediccion
+# el maximo es sobre sobre 77
+# el minimo sobre 50
+plot(x,y,ylim=c(0,100))
+abline(modelo,col="blue")
+lines(c(5,5),c(prediccion[2],prediccion[3]), col="brown")
+points(c(5,5),c(prediccion[2],prediccion[3]), col="brown")
+dato=data.frame(x,y)
+abl=coefficients(modelo)
+
+```
+
+

@@ -1,0 +1,36 @@
+Cuestión 1: El cuadro siguiente contiene una tabla de contingencia basada en los datos de una encuesta de una muestra de hombres y mujeres de clasificados por su interés en participar activamente en la vida política.
+
+a) ¿Se puede decir, a la luz de esos datos, que existe una relación significativa entre el género y esa clasificación? Justificar experimental y teóricamente las respuestas.
+
+b) Desarrollar en R una función propia (con opciones según los casos) para realizar las pruebas de verificación de este tipo de hipótesis y contrastar su efectividad con las funciones que ya incorpora R para las mismas.
+
+
+```{r}
+# Primero vamos a realizar la tabla con los datos 
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_3_entrega/DATOS")
+f=read.table("ejercicio1_tema9C.csv",header=T,sep=";")
+f
+
+N=168 # La suma de las filas y las columnas
+nij1=66*82/168
+nij1
+nij2=66*86/168
+nij2
+nij3=102*82/168
+nij3
+nij4=102*86/168
+nij4
+# Aplicaremos las prueba de homogeneidad
+chicuadrado=((35-32.21)^2/32.21)+((31-33.78)^2/33.78)+((47-49.78)^2/49.78)+((55-52.21)^2/52.21)
+chicuadrado
+# Contrastemos:
+#Ho:Las variables son indepentientes
+#H1:Ho no es cierta
+α=0.05
+m=2
+n=2
+v=(m-1)*(n-1)
+qchisq(0.95,v) 
+# Aceptamos Ho
+```
+

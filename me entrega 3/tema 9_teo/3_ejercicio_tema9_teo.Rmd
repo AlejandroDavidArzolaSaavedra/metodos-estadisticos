@@ -1,0 +1,47 @@
+Cuestión 3: La tabla siguiente muestra las cantidades (en gramos) de cuatro tipos diferentes de grasa absorbidas por rosquillas desde un análisis experimental en un laboratorio de la ULPGC. Cada medida se corresponde con seis lotes de rosquillas.
+Tipos de Grasa
+
+Una empresa del sector de la alimentación del polígono de Arinaga quiere utilizar estos tipos de grasa.
+a) ¿Existen diferencias significativas ente ellas? Justificar la respuesta y el tipo de prueba estadística empleada.
+b) En su caso, y si tuvieran costes similares, ¿Qué tipo de grasa se recomendaría utilizar? Utilizar R en los cálculos.
+```{r}
+#a)
+
+
+# Vamos a a realizar el test ANOVA para saber si existen diferencias de medias entre las distintas grasas 
+# H0: μ1 = μ2 =μ3= μ4
+# H1 : Al menos dos de las medias no son iguales.
+# k=4 grados de libertad 
+# N=24
+# Grados de libertad k -1 = 3, N-k = 20
+qf(0.95,3,20)
+# En este caso F debe ser mayor que 3.098391 para considerar que es falsa H0 y rechazar la igualdad de medias μ1= μ2 =μ3= μ4
+grasa_A<-c(164,172,168,177,195,156)
+grasa_B<-c(178,191,197,182,177,185)
+grasa_C<-c(175,193,178,171,176,163)
+grasa_D<-c(155,166,149,164,168,170)
+datos<-data.frame(variable=c(grasa_A,grasa_B,grasa_C,grasa_D))
+grupo=factor(c(rep(1,length(grasa_A)),rep(2,length(grasa_B)),rep(3,length(grasa_C)),rep(4,length(grasa_D))))
+attach(datos)
+ANOVA<-aov(variable~grupo,data= datos)
+summary(ANOVA)
+# Como 3.098391 Se rechaza H0
+# Por lo cual podemos aceptar que existen diferencias significativas entre ellas 
+
+#b)
+xdatos<-data.frame(grasa_A,grasa_B,grasa_C,grasa_D)
+boxplot(xdatos,
+col = "green",
+ylab="Cantidad de grasa absorbida de las rosquillas",
+xlab="Tipo de grasa de las rosquillas",
+staplewex=1,
+border= "brown")
+grid()
+# La que 
+summary(grasa_A)
+summary(grasa_B)
+summary(grasa_C)
+summary(grasa_D)
+ # La grasa menos perjudicial es la la grasa D por que es la que menos grasa absorve de media 
+```
+

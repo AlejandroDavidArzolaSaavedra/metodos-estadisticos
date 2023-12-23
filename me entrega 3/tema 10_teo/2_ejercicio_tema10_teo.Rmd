@@ -1,0 +1,75 @@
+Cuestión 2: Se realizó un estudio sobre la cantidad de azúcar convertida en cierto proceso bioquímico a distintas temperaturas. Se toma la base de temperaturas en 25º C y las cantidades de azúcar en miligramos. Los datos se codificaron y registraron como se indica en la siguiente tabla:
+a) Realizar un análisis de regresión lineal simple de y con x.
+b) Calcular la suma de cuadrados del error y realizar una prueba para la falta de ajuste. Evaluar gráficamente las relaciones y los errores residuales correspondientes.
+c) Encontrar los intervalos de confianza para los coeficientes de regresión.
+d) ¿Es posible realizar predicciones con este modelo lineal? En caso afirmativo determinar la cantidad media de azúcar convertida que se produce cuando se registra una temperatura codificada de 1.75 y el intervalo de confianza de la predicción correspondiente.
+e) Definir el concepto de respuesta media y encontrar los intervalos de confianza para la misma en el apartado anterior.
+f) Visualizar los resultados de los apartados a), c), d) y e) utilizando las funciones gráficas básicas de R y las de la librería ggplot2
+Explicar las todas respuestas. Utilizar R en los cálculos donde sea necesario.
+```{r}
+# Ensayos 
+x=c(8.1,7.8,8.5,9.8,9.5,8.9,8.6,10.2,9.3,9.2,10.5)
+#Se obtienen unos resultados
+y=c(1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0)
+n=length(x)
+#Lo ploteamos
+plot(x,y,pch=19,col="red")
+
+ #Calculamos el modelo de regresion lineal simple
+modelo=lm(y~x)
+summary(modelo)
+b1=coefficients(modelo)
+#Si el coeficientes es 0 no hay relacion entre las variables
+# Error estandar es 1/3
+# el r cuadrado es 0.4.4999
+# el r cuadrado ajustado nos salio  0.4443 
+  # el p value es del 1 % podemos  admitir que x e y se relacionan pero el ajuste  no es muy bueno
+abline(modelo,col="blue",lwd=2)
+# Relacion indirecta
+# la bondad de ajuste la calculamos con el residual
+e=residuals(modelo)
+plot(e,type="h",lwd=2,col="red")
+abline(h=0)
+grid()
+shapiro.test(e)
+# p value bajo
+ks.test(e,"pnorm")
+# intenta ajustar la acumulada de los errores y el test de shapiro lo ajuste a una normal
+# no sale proximo a 0.5
+library(tseries)
+# tiene en cuenta la simetria
+# la distribucion es asimetrica el error.
+jarque.bera.test(e)
+# lo visualizamos 
+hist(e,freq=F,col="green",density=25,border="brown")
+valores=seq(min(e),max(e),0.1)
+#la media es 0
+# la sigma es  0.06791268 
+# calculamos la media y la desviacion estandar
+points(valores,dnorm(valores,mean=mean(e),sd=sd(e)),type="l",col="blue")
+confint(modelo)
+coefficients(modelo)
+#Si es posible hacer una prediccion
+# Hacemos la prediccion  para el valor 1.75
+prediccion=predict(modelo,newdata=data.frame(x=1.75),interval = "pred")
+#ploteamos la linea del modelo 
+plot(x,y,pch=19,col="red")
+grid()
+abline(modelo,col="blue",lwd=2)
+# la respuesta media es por donde pasa la verdadera recta de regresion 
+ # a partir de ese valor, como se mueve la respuesta media 
+# nos sale la estima es 9 y picola prediccion es mas ajustadada , la media es mas pequeña
+# Para cada valor de la variable donde puede pasar la recta real 
+lines(c(1.75,1.75),c(prediccion[2],prediccion[3]),col="brown")
+points(c(1.75,1.75),c(prediccion[2],prediccion[3]),col="brown")
+#generamos el data frame 
+datos=data.frame(x,y)
+#Usamos el ggplot
+library(ggplot2)
+g=ggplot(data=datos, aes(x=x,y=y))
+g
+g+geom_point(colour="red")+
+  geom_smooth(method="lm")+
+  geom_linerange(aes(x=5,ymin=prediccion[2],ymax=prediccion[3]))
+```
+

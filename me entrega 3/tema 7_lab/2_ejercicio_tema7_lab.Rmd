@@ -1,0 +1,153 @@
+Ejercicio 2. Un comerciante minorista de la zona de Triana quiere analizar la influencia de los costos de publicidad en sus ventas. Durante 3 meses evalúa los costos semanales correspondientes, que se detallan en la siguiente tabla:
+
+a) Visualizar los datos para disponer de una visión clara de su evolución y estimar posibles relaciones entre las variables implicadas.
+
+b) Calcular la ecuación de la recta de regresión para pronosticar las ventas semanales a partir de los gastos de publicidad.
+
+c) Analizar el modelo estimado con la función summary y obtener un posible intervalo de confianza para las conclusiones de los distintos parámetros.
+
+d) Evaluar una predicción para unos costes de publicidad de 35€ y encontrar un intervalo de confianza para la misma.
+
+e) Visualizar los intervalos de confianza para la respuesta media y las predicciones del modelo establecido en b)
+
+f) Realizar un análisis de varianza para estudiar la bondad del ajuste y la linealidad de la regresión. Explicar los resultados.
+
+```{r}
+#a)
+costes_publicidad=c(40,20,25,30,30,50,40,20,50,40,25,50)
+ventas_semana=c(385,400,395,365,475,440,490,420,560,525,480,510)
+
+#Se puede ver claramente como mientras mas costes de publicidad gastes mas ventas a la semanas puedes llegar a tener
+plot(costes_publicidad,ventas_semana, pch=21,col="blue",bg="red", xlab = "costes en publcidad", ylab = "ventas a la semana ")
+grid()
+```
+
+```{r}
+#b)
+#Gracias al modelo de regresion lineal podemos predecir segun su coste en publicadad las ventas que puede llegar a tener
+plot(costes_publicidad,ventas_semana, pch=21,col="blue",bg="red", xlab = "costes en publcidad", ylab = "ventas a la semana ")
+grid()
+modelo<-lm(ventas_semana~costes_publicidad)
+abline(modelo, col="blue", lwd=2)
+grid()
+```
+```{r}
+#c)
+#Hacemos un data frame de las ventas
+gridx <- data.frame(ventas_semana)
+attach(gridx)
+#hacemos predicciones para los intervalos de confianzas segun las ventas semanales
+CIline <- predict(modelo,new=gridx,interval="conf",level=0.95)
+CIpred <- predict(modelo,new=gridx,interval="pred",level=0.95)
+#Volvemos a plotear 
+plot(ventas_semana~costes_publicidad,pch=15,cex=.5, col="red", xlab = "costes en publcidad", ylab = "ventas a la semana ", main="Intervalos de confianza")
+abline(modelo, col="blue")
+#aplicamos las predicciones 
+matlines(gridx,cbind(CIline,CIpred[,-1]), lty=c(1,2,2,3,3),col="blue")
+legend("topleft",lty=2:3,c("pred","conf"))
+grid()
+summary(CIline)
+summary(CIpred)
+
+
+
+```
+```{r}
+#d)
+
+plot(costes_publicidad,ventas_semana, pch=21,col="blue",bg="red", xlab = "costes en publcidad", ylab = "ventas a la semana ")
+grid()
+modelo<-lm(ventas_semana~costes_publicidad)
+abline(modelo, col="blue", lwd=2)
+grid()
+ #Vamos a realizar una prediccion para el coste de publicidad =35 $ 
+costespublicdad<-35
+prediccion_masa<-predict(modelo,list(costes_publicidad=costespublicdad))
+#Representamos la linea y los puntos del coste de 35 $
+points(costespublicdad,prediccion_masa, pch=16, col="black")
+lines(c(costespublicdad,costespublicdad),c(0,prediccion_masa), col="red",lty=3, lwd=3)
+
+#Intervalo confianza predicción
+inter_prediccion2<-predict(modelo, level = 0.95, newdata = data.frame(costes_publicidad=costespublicdad), interval = "prediction" )
+lines(c(costespublicdad,costespublicdad), c(inter_prediccion2[2], inter_prediccion2[3]), col="green")
+points(c(costespublicdad,costespublicdad), c(inter_prediccion2[2], inter_prediccion2[3]), col="green")
+```
+```{r}
+#e)
+# Hacemos un data frame de la masa del barbadensis
+
+gridx <- data.frame(ventas_semana)
+gridx
+attach(gridx)
+#Hacemos una prediccion del modelo segun su masa 
+CIline <- predict(modelo,new=gridx,interval="conf",level=0.95)
+CIpred <- predict(modelo,new=gridx,interval="pred",level=0.95)
+#Volvemos a plotear la barbadensis 
+plot(ventas_semana~costes_publicidad,pch=15,cex=.5, col="green", xlab = "costes en publicidad", ylab = "ventas a la semana ", main="Intervalos de confianza")
+#Ponemos encima la linea del modelo de regresion lineal 
+abline(modelo, col="black")
+#Y las lineas del intervalo de confianza  y para la prediccion 
+matlines(gridx,cbind(CIline,CIpred[,-1]), lty=c(1,2,2,3,3),col="red")
+legend("topleft",lty=2:3,c("pred","conf"))
+grid()
+summary(CIline)
+summary(CIpred)
+```
+
+```{r}
+#f)
+X=c(40,20,25,30,30,50,40,20,50,40,25,50)
+Y=c(385,400,395,365,475,440,490,420,560,525,480,510)
+qf(0.95,1,12-2)
+X_M<-mean(X);X_M
+Y_M<-mean(Y);Y_M
+X2<-X*X
+X_VAR<-sum(X2)/length(X)-X_M^2;X_VAR
+Y2<-Y*Y
+Y_VAR<-sum(Y2)/length(Y)-Y_M^2;Y_VAR
+XY_COVAR<-sum(X*Y)/length(Y)-(X_M*Y_M);XY_COVAR
+B1<-XY_COVAR/X_VAR
+B1
+B0<-Y_M-B1*X_M
+B0
+boxplot(Y ~ X, col=c("green","blue","yellow","purple","gray"),xlab= "X", ylab= "Y" )
+grid()
+n<-length(X)
+S_2<-(sum((Y-(B0+B1*X))^2))/(n-2)
+S_2
+SCE<-sum((Y-(B0+B1*X))^2);SCE
+STCC<-sum((Y-Y_M)^2);STCC
+SCR<-STCC-SCE;SCR
+F_SCR<-SCR/S_2;F_SCR
+1-pf(F_SCR,1,n-2)
+
+# H0: β1= 0
+# H1: β1≠ 0
+anova_XY<-aov(modelo)
+anova_XY
+summary(anova_XY)
+#la variación en los resultadosYdebida a las fluctuaciones de probabilidad o aleatorias son independientes de los valores de x
+
+X_Factor<-as.factor(X)
+datos<-data.frame(X_Factor,Y)
+Y_M_F<-rep(0,n)
+for( i in 1:n) {Y_M_F[i]<-mean(Y[X_Factor==X[i]])}
+SCE_Puro<-sum((Y-Y_M_F)^2)
+SCE_Puro
+SC_Falta_Ajuste<-SCE-SCE_Puro
+SC_Falta_Ajuste
+k<-nlevels(X_Factor)
+S_2_Puro<-SCE_Puro/(n-k)
+S_2_Puro
+F_SC_Falta_Ajuste<-SC_Falta_Ajuste/(S_2_Puro*(k-2))
+F_SC_Falta_Ajuste
+
+1-pf(F_SCR,1,n-2)
+1-pf(F_SC_Falta_Ajuste,1,k-2)
+qf(0.95,1,k-2)
+
+
+#Cómo el valor del estadístico F de falta de ajuste (“F_SC_Falta_Ajuste”) es 0.09744223, inferior al F límite para α=0.05, 10.12796, no puede rechazarse la hipótesis de que el modelo tentativo describe adecuadamente los datos. Además el valor P para este valor de F(0.09744223) es de 0.7753595, muy superior a 0.05 lo que ratifica la anterior suposición.
+
+```
+

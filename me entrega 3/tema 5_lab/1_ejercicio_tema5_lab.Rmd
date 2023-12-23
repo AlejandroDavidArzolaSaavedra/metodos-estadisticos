@@ -1,0 +1,41 @@
+Ejercicio 1. El fichero “Alturas_Estudiantes_EII.txt” contiene un conjunto de datos de valores de medidas de la altura (en centímetros) de 635 estudiantes de la EII. Se pide:
+
+a) Ajustar una distribución normal a esos datos mediante el método de máxima verosimilitud.
+
+b) Representar gráficamente el diagrama de barras de los datos junto con la función masa de la distribución del ajuste.
+
+c) ¿Es la distribución resultante un buen ajuste para los datos?. Razonar la respuesta
+
+
+```{r}
+#)
+getwd()
+library(MASS)
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_3_entrega/DATOS")
+p=read.csv("Alturas_Estudiantes_EII.txt",sep=",",head=T)
+p
+```
+
+```{r}
+#a)
+# Estimación de los parámetros μy σde la distribución normal por máxima verosimilitud:
+ajuste.normal<-fitdistr(p$Alturas,"normal") 
+ajuste.normal
+ # El ajuste mediante el método de máxima verosimilitud viene dado por una N (173, 18). Para ver y quedarnos con μ y σ
+```
+
+```{r}
+#b)
+mu<-ajuste.normal$estimate[1] 
+sigma<-ajuste.normal$estimate[2]
+mu
+sigma
+hist(p$Alturas,breaks=13,freq=FALSE,main="",xlab="Alturas_Estudiantes",ylab="Densidad",col="green",density=10, angle= 45, border= "brown")
+lines(1200:2400/10,dnorm(1200:2400/10,mu,sigma,))
+
+```
+
+```{r}
+#c)
+#Si lo es, por que como  podemos visualizar  las media donde se encuentra la mayoria de los datos coincide donde nos encuentra con nuestro histograma realizado y que las desviaciones sufridas coinciden con las nuestras 
+```

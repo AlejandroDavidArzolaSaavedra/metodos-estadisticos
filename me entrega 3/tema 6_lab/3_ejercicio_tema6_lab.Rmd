@@ -1,0 +1,55 @@
+Ejercicio 3: El Cuadro siguiente contiene una tabla de contingencia basada en los datos de una muestra de estudiantes de Ingeniería Informática y de otras titulaciones de la ULPGC clasificados según el tiempo de uso de más de dos horas al día en redes sociales. ¿Se puede decir, a la luz de esos datos, que existe una relación significativa entre el uso de redes sociales y que sean o no estudiantes de Ingeniería Informática?
+
+```{r}
+#Ho:Relacion de redes sociales y estuadiantes de ingenieria informatica
+#H1:Rechazamos Ho
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_3_entrega/DATOS")
+j1=read.table("ejercicio3_tema6_lab.csv",header=T,sep=";",row.names = 1,col.names = c(0,1))
+j1
+CHI2<-195*(sum(j1)-1)
+CHI2
+# Región Crítica
+gl<-(nrow(j1)-1)*(ncol(j1)-1)
+qchisq(0.95,gl)
+
+test<-chisq.test(j1)
+test
+test$observed
+test$expected
+
+library(knitr)
+#
+j<-matrix(c(75,15,73,32),ncol=2,nrow=2,byrow=F)
+colnames(j)<-c("Estudiantes II","Otros Titulos")
+rownames(j)<-c("Uso de mas de dos horas","Uso de menos de dos horas")
+j<-as.table(j)
+kable(j)
+j_ampliada<-addmargins(j)
+kable(j_ampliada)
+
+ni<-j_ampliada[3,]
+nj<-j_ampliada[,3]
+N<-as.numeric(j_ampliada[3,3])
+pj<-j^2
+suma<-0
+for(i in 1:2){
+for(j in 1:2){
+suma<-suma+as.numeric(pj[j,i]/(ni[i]*nj[j]))
+}
+}
+CHI2<-N*(suma-1)
+CHI2
+gl<-(nrow(j)-1)*(ncol(j)-1);gl
+qchisq(0.95,gl)
+# En una tabla de contingencia de 2 ×2, donde sólo tenemos 1 grado de libertad, se aplica una corrección llamada corrección de Yates para continuidad.
+Test2 <- chisq.test(j1, correct=TRUE) # Se hace el test chi-cuadrado y se asigna a la variable .Test (correct=TRUE indica que se aplique la corrección de Yates).
+Test2
+Test2$expected#  las frecuencias esperadas
+round(Test2$residuals^2, 2)
+# Por tanto, rechazamos Ho con un nivel de significación p>0.01 (p = 0.0269). No Existe una relación altamente significativa entre la asistencia al curso y el resultado en la prueba, por lo que habría que considerar que se ha mejorado, al menos, en la identificación de rapaces.
+# Por lo que para un nivel de signiﬁcaci´on α = 0,05  se rechaza, aunque con poca evidencia, la hipotesis de independencia.
+
+# Para el caso de tablas 2×2 se aplica el test exacto de Fisher, aunque existe la alternativa de aplicar el test Chi-cuadrado con la correccio´n de Yates.
+fisher.test(j1) 
+```
+

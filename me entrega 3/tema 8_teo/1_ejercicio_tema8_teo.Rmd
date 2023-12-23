@@ -1,0 +1,69 @@
+Cuestión 1: Se toma una muestra aleatoria simple de una población que sigue una distribución N(μ, σ2), donde μ y σ son desconocidas. Los valores obtenidos son:
+3.58, 10.03, 4.77, 9.71, 10.4, 14.66, 8.45, 5.4, 9.75, 10.1
+Utilizando α= 0.05:
+a) ¿Hay evidencias para pensar que la media de la población sea mayor o igual que 10? Razonar la respuesta.
+b) ¿Podría afirmarse con los datos que la media de la población es inferior a 10?
+c) Calcular los errores tipo I, tipo II y la potencia de la prueba en su caso.
+```{r}
+# HO Media ≥ 10
+# H1 Media < 10
+#Muestra
+n=10
+Ho=10
+x=c(3.58,10.03,4.77,9.71,10.4,14.66,8.45,5.4,9.75,10.1)
+media=mean(x)
+media
+desviacion_tipica=sd(x)
+desviacion_tipica
+α=0.05
+y=qt(α,n-1)
+y
+Estadistico=(media-Ho)/(desviacion_tipica/sqrt(n))
+Estadistico
+# Desicicion = no rechazar H0 y concluir que el número promedio de una muestra aleatoria simple de una población no es significativamente menor que 10
+PT<-seq(5,20,0.001)
+sigma_muestra<-desviacion_tipica
+mu<-Ho
+media_muestra<-media
+tmedia_muestra<-(media_muestra-mu)/(sigma_muestra/sqrt(n-1))
+tmu<-(mu-mu)/(sigma_muestra/sqrt(n-1))
+TPT<-(PT-mu)/(sigma_muestra/sqrt(n-1))
+DP0<-dt(TPT, n-1)
+plot(PT,DP0, type= "l", col="brown", ylab= "Densidad de Probabilidad", xlab= "Estadístico t (Muestra aleatoria simple de una población)")
+abline(v=mu, col="green")
+abline(v=media_muestra, col="blue")
+alfa<-α
+# Intevalo de decision
+Zona_critica1<-qt(alfa,n-1)*(sigma_muestra/sqrt(n-1))+mu
+Zona_critica1
+#b)
+#No Podría afirmarse con los datos que la media de la población es inferior a 10 solo podriamos llegar a afirmar que Ho no es verdadera #c)
+#Acetamos Ho , Siendo Ho verdadera = No error
+#Aceptamos Ho , Siendo Ho falsa = Error tipo II (β)
+#Rechazamos Ho , Siendo Ho verdadera = Error tipo I (α)
+#Rechazamos Ho, Sieno Ho falsa = No error
+
+# α= P(RECHAZO/SIENDO Ho Verdadero)
+# β= P(ACIERTO/SIENDO Ho Falsa)
+# Potencia= Probabilidad de rechazar Ho
+# P= 1- β
+# 
+# qt = -1.833113
+# -1.833= VC-Ho/S/sqrt(n)
+VC=y*(desviacion_tipica/sqrt(n))+n
+VC
+# Error tipo 1 es 0,05 
+# Error tipo 2 es 
+# β= P(Acetar/Ho falsa)
+ # P(Media > 8.098184)
+t=(VC-media)/(desviacion_tipica/sqrt(n))
+t
+β=pt(t,9)
+β
+Potencia=1-β
+Potencia
+power.t.test( delta = 1, sd=desviacion_tipica, sig.level= α, power= Potencia)
+#En este caso tomaremos n=136, que nos garantiza alcanzar una potencia del 70%
+
+```
+

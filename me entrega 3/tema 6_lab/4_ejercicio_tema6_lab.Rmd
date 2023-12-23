@@ -1,0 +1,29 @@
+
+Ejercicio 4: El cuadro siguiente contiene una tabla donde se reflejan los resultados de dos radiólogos que analizan las mismas radiografías para determinar si un paciente se ha fracturado un brazo o no.
+
+a) Explicar la aplicación del test de McNemar (mcnemar.test) para tablas de contingencia que tengan que ver con los resultados de dos pruebas sobre los mismos individuos (datos apareados).
+
+b) ¿Se puede decir, a la luz de esos datos, que existe dependencia entre el médico que ha realizado el diagnóstico y el resultado del mismo?
+
+
+```{r}
+#Ho: n1.2=n2.1 #Dependientes los datos
+#H1:Rechazamos Ho
+#H0 es que los totales marginales de cada respuesta sean los mismos para cada una de la consultas(pruebas)
+
+setwd("C:/Users/34636/Desktop/Alejandro_Arzola_ME_3_entrega/DATOS")
+example=read.table("ejercicio4_tema6_labtotal.csv",header=T,sep=";")
+example
+# El Estadístico de contraste (concorrección de continuidad) es:
+chicuadrado=((12-18)-1)^2/(12+18)
+chicuadrado
+# El test de Mcnemar se aplica a tablas de contingencia de 2x2 que son resultados de dos consultas (pruebas) obtenidas sobre los mismos individuos (datos apareados).
+Respuesta <-matrix(c(103,18,12,35),nrow = 2, dimnames = list("Jefe de Servicio" = c("Brazo Fracturado", "Brazo Normal"),"Internista" = c("Brazo Fracturado", "Brazo Normal")))
+Respuesta
+# Condiciones de aplicación: Es necesario que el muestreo esté constituido por realizaciones independientes de pares aleatorios (X,Y) acoplados o apareados. Las condiciones de utilización de la aproximación por una distribución χ2 con 1grados de libertad.
+#Que n1.2 y n2.1 ean bastante grandes o mayores que 20
+mcnemar.test(Respuesta, y = NULL, correct = TRUE)
+# Permite comparar dos proporciones sobre dos poblaciones en el caso donde los dos muestreos estén apareados
+#Como el valor p es 0.3613 > 0.05 No podemos rechazar Ho
+```
+

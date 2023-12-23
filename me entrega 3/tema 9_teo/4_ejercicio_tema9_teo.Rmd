@@ -1,0 +1,37 @@
+Cuestión 4: La puntuación de 10 estudiantes en dos pruebas psicológicas se detallan en la tabla siguiente. Calcular el coeficiente de correlación de Pearson y el coeficiente de Spearman para los rangos. Explicar los cálculos y contrastar con las funciones de R los resultados. ¿Qué conclusiones pueden extraerse de los resultados de ambos coeficientes?
+```{r}
+test1<-c(92,89,86,83,77,71,62,2.6,53,40)
+test2<-c(88,85,93,79,70,87,52,84,41,64)
+cor(test1, test2 , method = c( "pearson"))
+#Lo que indica una correlación positiva alta (0.6363636) entre las notas de algebra y programacion
+# Suma de cuadrados diferencia rangos
+d_2<-(test1-test2)^2; 
+sum(d_2)
+n<-length(test1)
+r<-1-((6*sum(d_2)/(n*(n^2-1))))
+# Coeficiente Spearman
+r
+# Estadistico
+z<-r*sqrt(n-1); z
+# RegionCritica
+z_critico<-qnorm(0.975); z_critico
+#
+cor(test1,test2 , method= c( "spearman"))
+cor.test(test1, test2 , method = c( "spearman"))
+# En este caso el bajo valor de p=0.05445 mayor que 0.05 confirma la aceptacion de hipótesis nula de correlación cero.,Existe relacion
+# El coeficiente de correlación muestral sirve para medir el coeficiente de correlación poblacional ρ, la relación lineal entre dos variables continuas en este caso los dos test
+# Otra forma de hacerlo
+n=length(test1)
+ncuadrado=n^2
+di=test1-test2
+di
+dicuadrado=di^2
+dicuadrado
+sumadicuadrado=sum(dicuadrado)
+sumadicuadrado
+r5=1-(6/(n*(ncuadrado-1))*sumadicuadrado)
+r5
+Zo=(r5-0)/(1/(sqrt(n-1)))
+Zo
+```
+

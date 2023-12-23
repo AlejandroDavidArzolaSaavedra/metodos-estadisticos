@@ -1,0 +1,54 @@
+Cuestión 4: El propietario de un vehículo híbrido de la marca Toyota piensa que el consumo medio de gasolina, en circuito combinado de carretera-ciudad, es superior a los 5,35 litros cada 100 km que es lo que los distribuidores de la marca publicitaban y que le impulsaron a decidir su compra. Para analizar su decisión ha realizado las siguientes medidas aleatorias de consumos medios cada 100 km durante el año 2018:
+
+a) Con un nivel de significancia del 1% analizar si fue una decisión correcta y fundada la adquisición del vehículo por tener un consumo medio de 5.35 l/100km.
+
+b) ¿Cuántas ocasiones debería observarse a lo largo del año 2019 el consumo medio para que, con una probabilidad de 0.99, se detectase un consumo medio de 6.0 litros por cada 100 km?, ¿Sería posible hacer el análisis en condiciones con un recorrido anual de 25.000 km? Explicar y documentar teóricamente las respuestas.
+
+c) Responder al apartado b) pero con una probabilidad del 0.90. Razonar la respuesta.
+
+```{r}
+f=c(6.2,6.6,5.8,5.4,6.15,6.68,7.0,5.8,5.6,5.85,6.2,6.4,6.75,5.3,6.3)
+
+#a)
+# Contraste para la media con varianza desconocida
+
+# Ho: M = 5.35
+# H1: M > 5.35
+n=length(f)
+n
+x=qt(0.99,n-1)
+x
+media=mean(f)
+Ho=5.35
+desviacion_estandar=sd(f)
+#Estadistico
+Estadistico=(media-Ho)/(desviacion_estandar/sqrt(21))
+Estadistico
+# Desición: No aceptamos Ho podemos asumir que su consumo medio es mayor.
+
+#b)Se trata de un intervalo par la media con varianza desconocida
+#[media+- tn-1,α/2*S/sqrt(n)]
+# tn-1,α/2*S/sqrt(n)=ERROR
+#n=tn-1,α/2
+error=6
+n=(x*desviacion_estandar-error)^2
+n
+#Deberia observaso 21 muestras
+#Por otro lado no es posible hacer un recorrido anual de 25000 kilometros dado que es mayor a 250
+#Debido a que se consumen mas de 6.0 litros por cada 100 kilometros
+ideal=6*250
+ideal
+kilometros=Estadistico*250
+kilometros
+#c)
+y=qt(0.90,n-1)
+y
+H1=6
+Estadistico2=(media-H1)/(desviacion_estandar/sqrt(21))
+Estadistico2
+#kilometros2=Estadistico2*250
+#kilometros2
+m=(y*desviacion_estandar-error)^2
+m
+# En este caso si seria posible hacer un recorrido anual de 25000 kilometros 
+```
