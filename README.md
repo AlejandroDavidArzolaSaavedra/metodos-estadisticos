@@ -1,4 +1,7 @@
 # Métodos Estadísticos - Repositorio de Ejercicios y Proyecto ULPGC 📊
+<p align="center">
+    <img src ="https://github.com/AlejandroDavidArzolaSaavedra/metodos-estadisticos-ulpgc/assets/90756437/a8aca4c8-1062-4f78-89db-26e722544e7f" width="400px"/>
+</p>
 
 ## Descripción
 
