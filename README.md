@@ -17,6 +17,9 @@ En la carpeta [me entrega 1](me%20entrega%201) , [me entrega 2](me%20entrega%202
 
 La segunda etapa del curso se centra en conceptos clave como varianza, desviación típica, funciones de densidad y probabilidades. Explora distribuciones binomial y de Poisson, así como la utilidad de herramientas como boxplot y histograma. Además, aborda temas como covarianza, esperanza y cuantiles, proporcionando una base sólida para análisis estadísticos avanzados.
 
+<p align="center">
+    <img width="400" src="https://github.com/AlejandroDavidArzolaSaavedra/metodos-estadisticos-ulpgc/assets/90756437/ac7a7aa0-e628-4030-9952-bfbfa29819c8">
+<p>
 ### Proyecto 🚀
 
 La carpeta [proyecto](/proyecto) contiene el proyecto principal de la asignatura. Este proyecto aborda un problema estadístico del mundo real y demuestra la aplicación de los métodos aprendidos en el curso para analizar y presentar resultados de manera efectiva.
