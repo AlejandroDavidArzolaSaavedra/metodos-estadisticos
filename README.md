@@ -20,6 +20,14 @@ La segunda etapa del curso se centra en conceptos clave como varianza, desviaci�
 <p align="center">
     <img width="400" src="https://github.com/AlejandroDavidArzolaSaavedra/metodos-estadisticos-ulpgc/assets/90756437/ac7a7aa0-e628-4030-9952-bfbfa29819c8">
 <p>
+    
+**Entrega 3: Análisis Estadístico Avanzado**
+
+La tercera entrega profundiza en conceptos clave, incluyendo errores tipo I y tipo II, contrastes de hipótesis, estadísticas para muestras aleatorias y construcción de intervalos de confianza. Aborda técnicas avanzadas como la prueba chi cuadrado, ANOVA, boxplots, correlación de Pearson, coeficiente de Spearman y regresión lineal simple. Además, explora temas como la suma de errores cuadráticos, chi cuadrado con corrección de Yates, coeficiente de determinación y covarianza.
+
+<p align="center">
+    <img width="400" src="https://github.com/AlejandroDavidArzolaSaavedra/metodos-estadisticos-ulpgc/assets/90756437/4dca5a80-8134-44fa-824f-44ae3da67471">
+<p>
 
 ### Proyecto 🚀
 
