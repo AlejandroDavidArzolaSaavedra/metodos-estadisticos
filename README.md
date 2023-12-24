@@ -20,6 +20,7 @@ La segunda etapa del curso se centra en conceptos clave como varianza, desviaci�
 <p align="center">
     <img width="400" src="https://github.com/AlejandroDavidArzolaSaavedra/metodos-estadisticos-ulpgc/assets/90756437/ac7a7aa0-e628-4030-9952-bfbfa29819c8">
 <p>
+
 ### Proyecto 🚀
 
 La carpeta [proyecto](/proyecto) contiene el proyecto principal de la asignatura. Este proyecto aborda un problema estadístico del mundo real y demuestra la aplicación de los métodos aprendidos en el curso para analizar y presentar resultados de manera efectiva.
