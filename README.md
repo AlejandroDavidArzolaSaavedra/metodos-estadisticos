@@ -13,6 +13,10 @@ Este repositorio contiene ejercicios y proyectos desarrollados en el marco de la
 
 En la carpeta [me entrega 1](me%20entrega%201) , [me entrega 2](me%20entrega%202) , [me entrega 3](me%20entrega%203) encontrarás una colección de problemas y ejercicios relacionados con los diferentes temas cubiertos en la asignatura. Cada ejercicio está acompañado de su solución, facilitando así el aprendizaje y la práctica de los conceptos estadísticos.
 
+**- Entrega 2: Métodos Estadísticos**
+
+La segunda etapa del curso se centra en conceptos clave como varianza, desviación típica, funciones de densidad y probabilidades. Explora distribuciones binomial y de Poisson, así como la utilidad de herramientas como boxplot y histograma. Además, aborda temas como covarianza, esperanza y cuantiles, proporcionando una base sólida para análisis estadísticos avanzados.
+
 ### Proyecto 🚀
 
 La carpeta [proyecto](/proyecto) contiene el proyecto principal de la asignatura. Este proyecto aborda un problema estadístico del mundo real y demuestra la aplicación de los métodos aprendidos en el curso para analizar y presentar resultados de manera efectiva.
