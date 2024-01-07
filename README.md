@@ -61,5 +61,5 @@ La carpeta [proyecto](/proyecto) contiene el proyecto principal de la asignatura
 4. ¡Disfruta aprendiendo y practicando métodos estadísticos!
 
 ## Contribuciones 🤝
-
+<img align="left" width="100" height="100" src="https://github.com/AlejandroDavidArzolaSaavedra/Kata-Working-With-Sqlite/assets/90756437/f83020eb-76e4-4224-87e4-ae2a2d370b05g"></a>
 Las contribuciones son bienvenidas. Si encuentras errores, tienes sugerencias o deseas agregar más ejercicios, siéntete libre de abrir un problema o enviar una solicitud de extracción.
